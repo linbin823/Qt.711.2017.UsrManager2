@@ -91,6 +91,10 @@ API说明
     描述：获得在线用户列表。列表中的对象由UsrManager管理，不允私自许删除！
     备注：为了方便在QML中使用，返回的指针降级为QObject*。在C++中使用时，可以用static_cast<UsrInfoOnline*> 静态转换。
 
+    int activeUsrNumber(void);
+    功能：用户数量统计
+    描述：返回活动的用户数量
+
     virtual void save(iLoadSaveProcessor* processor);
     功能：保存接口
     描述：保存所有信息到iLoadSaveProcessor

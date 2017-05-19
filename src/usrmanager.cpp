@@ -214,6 +214,18 @@ QList<QObject*> UsrManager::getAllUsrInfoOnline(void){
     }
     return usrInfoOnlineList;
 }
+
+//用户数量统计
+int UsrManager::activeUsrNumber(void){
+    int count = 0;
+    foreach (UsrInfoOnline* t, _usrInfoOnlineList) {
+        if(isLogIn( t->usrID() )){
+            count++;
+        }
+    }
+    return count;
+}
+
 /*
  * 检查用户名是否重名
  * 输入参数：

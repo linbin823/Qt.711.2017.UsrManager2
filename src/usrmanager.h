@@ -64,6 +64,9 @@ public slots:
     QList<QObject*> getAllUsrInfo(void);
     QList<QObject*> getAllUsrInfoOnline(void);
 
+    //用户数量统计
+    int activeUsrNumber(void);
+
     virtual void save(iLoadSaveProcessor* processor);
     virtual void load(iLoadSaveProcessor* processor);
 
