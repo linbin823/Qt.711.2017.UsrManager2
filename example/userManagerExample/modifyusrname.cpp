@@ -26,7 +26,7 @@ void ModifyUsrName::on_pbModifyLevel_clicked()
 {
     if(_info!= nullptr){
         bool ret = _info->setName( ui->leNewName->text(),
-                        ui->lePWD->text() );
+                                   ui->lePWD->text() );
 
         QString msgText;
         QMessageBox msgBox;

@@ -108,14 +108,19 @@ API说明
     QString name(void) const;
     功能：查询名称
 
-    bool setName(const QString& newName, const QString& pwd);
-    功能：修改用户名，成功返回ture，否则返回false
+    QByteArray genCryptoString(const QString &pswd);
+    (2017.06.14new)功能：方便UsrManager使用，使用Algorithm( Algorithm(pswd)+name )算法，从明文密码生成加密密码。
+
+    bool setName(const QString& newName, const QString &pwdWithoutCrypto);
+    (2017.06.14modify)功能：修改用户名，成功返回ture，否则返回false
+    修改用户名时，必须传入明文密码。需要它来生成新的密码。
+
 
     int level(void) const;
     功能：查询等级
 
-    bool setLevel(const quint8& newLevel, const QString& pwd);
-    功能：修改等级，成功返回ture，否则返回false
+    bool setLevel(const quint8& newLevel, const QByteArray& pwd);
+    (2017.06.14modify)功能：修改等级，成功返回ture，否则返回false
 
     QString usrDescript(void)const;
     功能：查询用户描述
@@ -123,11 +128,11 @@ API说明
     bool setUsrDescript(const QString& data);
     功能：修改用户描述，成功返回ture，否则返回false
 
-    bool passWordCheck(const QString& testPswd);
-    功能：检查密码，正确返回ture，否则返回false
+    bool passWordCheck(const QByteArray& testPswd);
+    (2017.06.14modify)功能：检查密码，正确返回ture，否则返回false
 
-    bool setPassWord(const QString& oldPswd, const QString& newPswd);
-    功能：修改密码，成功返回ture，否则返回false
+    bool setPassWord(const QByteArray& oldPswd, const QByteArray& newPswd);
+    (2017.06.14modify)功能：修改密码，成功返回ture，否则返回false
 
 三、UsrInfoOnline class
 

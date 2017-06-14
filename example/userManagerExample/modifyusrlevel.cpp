@@ -26,7 +26,8 @@ void ModifyUsrLevel::setUsrInfo( UsrInfo* info ){
 void ModifyUsrLevel::on_pbModifyLevel_clicked()
 {
     if(_info!= nullptr){
-        bool ret = _info->setLevel( ui->sbUsrNewLevel->value(),ui->lePWD->text() );
+        bool ret = _info->setLevel( ui->sbUsrNewLevel->value(),
+                                    _info->genCryptoString( ui->lePWD->text() ));
 
         QString msgText;
         QMessageBox msgBox;

@@ -26,7 +26,7 @@ void ModifyUsrDescript::setUsrInfo( UsrInfo* info ){
 void ModifyUsrDescript::on_pbModifyLevel_clicked()
 {
     if(_info!= nullptr){
-        bool ret = _info->setUsrDescript( ui->teUsrDescript->toPlainText() );
+        _info->setUsrDescript( ui->teUsrDescript->toPlainText() );
         QString msgText;
         QMessageBox msgBox;
         msgText = "change description successful!";

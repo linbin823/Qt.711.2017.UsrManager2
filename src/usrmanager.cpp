@@ -111,7 +111,7 @@ int UsrManager::logIn( const QString& usrName, const QString& usrPwd, const QStr
     UsrInfo* info;
     foreach( UsrInfoOnline* t, _usrInfoOnlineList){
         info = static_cast<UsrInfo*>(t->usrInfo() );
-        if( info->name() == usrName && info->passWordCheck( usrPwd )){
+        if( info->name() == usrName && info->passWordCheck( info->genCryptoString( usrPwd ) )){
             if( t->onlineUsrInfo() == onlineUsrInfo ){
                 //有登录信息
                 t->setLoginTime();
@@ -122,7 +122,7 @@ int UsrManager::logIn( const QString& usrName, const QString& usrPwd, const QStr
         }
     }
     foreach( UsrInfo* t, _usrInfoList){
-        if( t->name() == usrName && t->passWordCheck( usrPwd )){
+        if( t->name() == usrName && t->passWordCheck( t->genCryptoString( usrPwd ) )){
             //新登录
             usrID = usrIDGen();
             UsrInfoOnline* newOne = new UsrInfoOnline(t, this);
@@ -165,8 +165,8 @@ QObject* UsrManager::addUsr(const QString& name, int level, const QString& pswd,
         //用户名不冲突
         UsrInfo* newOne = new UsrInfo(this);
         newOne->setName( name , "");
-        newOne->setLevel( level , "");
-        newOne->setPassWord( "", pswd);
+        newOne->setLevel( level , newOne->genCryptoString( "" ));
+        newOne->setPassWord( newOne->genCryptoString( "" ), newOne->genCryptoString( pswd ));
         newOne->setUsrDescript( usrDescript );
         _usrInfoList.append(newOne);
         emit msgUsrInfoListChanged();

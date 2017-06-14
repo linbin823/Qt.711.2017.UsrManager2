@@ -1,7 +1,6 @@
 ﻿#if _MSC_VER >= 1600
 #pragma execution_character_set("utf-8")
 #endif
-#include <QCryptographicHash>
 #include "usrinfo.h"
 /*
  * 构造函数
@@ -13,11 +12,12 @@
  * 3、初始化名称
  * 4、初始化等级
  */
-UsrInfo::UsrInfo(QObject *parent, const QString salt): QObject(parent), _salt(salt)
+UsrInfo::UsrInfo(QObject *parent, QCryptographicHash::Algorithm alg):
+    QObject(parent),_alg(alg)
 {
-    QByteArray initPswd = _salt.toLocal8Bit();
-    _pswd = QCryptographicHash::hash(initPswd, QCryptographicHash::Sha256);
     _name = "undefined";
+    _pswd = QCryptographicHash::hash( QString("").toUtf8() , _alg);
+    _pswd = QCryptographicHash::hash( (_pswd + _name.toUtf8() ), _alg);
     _level = 0;
 }
 
@@ -32,9 +32,26 @@ UsrInfo::~UsrInfo(){
 }
 
 /*
+ * 辅助函数
+ * 输入参数：
+ * 1、const QString& name
+ * 2、const QString& pswd
+ * 返回数值：
+ * QString
+ * 功能描述：
+ * 界面用,用于生成加密的密码字符串
+ * 加密方式：Algorithm( Algorithm(pswd)+name )
+ */
+QByteArray UsrInfo::genCryptoString(const QString &pswd){
+    QByteArray ret = QCryptographicHash::hash( pswd.toUtf8(), _alg);
+    ret = QCryptographicHash::hash( (ret + _name.toUtf8() ), _alg);
+    return ret;
+}
+
+/*
  * 查询名称
  * 输入参数：无
- * 返回数值：用户名称
+ * 返回数值：用户名称SSS
  * 功能描述：
  */
 QString UsrInfo::name() const{
@@ -59,10 +76,8 @@ int UsrInfo::level() const{
  * 1、正确返回ture，否则返回false
  * 功能描述：
  */
-bool UsrInfo::passWordCheck(const QString& testPswd){
-    QString temp = testPswd+_salt;
-    QByteArray res = QCryptographicHash::hash(temp.toLatin1(), QCryptographicHash::Sha256);
-    if(res == _pswd ){
+bool UsrInfo::passWordCheck(const QByteArray& testPswd){
+    if(testPswd == _pswd ){
         return true;
     }
     return false;
@@ -72,15 +87,20 @@ bool UsrInfo::passWordCheck(const QString& testPswd){
  * 修改用户名
  * 输入参数：
  * 1、newName 新用户名
- * 2、testPswd 测试密码
+ * pwdWithoutCrypto 密码
  * 返回数值：
  * 1、成功返回ture，否则返回false
+ * 2、修改用户名后，密码也要更新
  * 功能描述：
  */
-bool UsrInfo::setName(const QString& newName, const QString& pwd){
-    if(passWordCheck(pwd)){
+bool UsrInfo::setName(const QString& newName, const QString &pwdWithoutCrypto){
+    QByteArray temp =   QCryptographicHash::hash( pwdWithoutCrypto.toUtf8() , _alg);
+    temp = QCryptographicHash::hash( (temp + _name.toUtf8() ), _alg);
+    if(passWordCheck(temp)){
         if(_name != newName ){
             _name = newName;
+            _pswd = QCryptographicHash::hash( pwdWithoutCrypto.toUtf8() , _alg);
+            _pswd = QCryptographicHash::hash( (_pswd + _name.toUtf8() ), _alg);
             emit nameChanged();
             return true;
         }
@@ -97,7 +117,7 @@ bool UsrInfo::setName(const QString& newName, const QString& pwd){
  * 1、成功返回ture，否则返回false
  * 功能描述：
  */
-bool UsrInfo::setLevel(int newLevel, const QString& pwd){
+bool UsrInfo::setLevel(int newLevel, const QByteArray &pwd){
     if(passWordCheck(pwd)){
         if(_level!=newLevel){
             _level = newLevel;
@@ -146,12 +166,10 @@ bool UsrInfo::setUsrDescript(const QString& data){
  * 功能描述：
  * 1、检查密码，正确就换新密码
  */
-bool UsrInfo::setPassWord(const QString& oldPswd, const QString& newPswd){
+bool UsrInfo::setPassWord(const QByteArray &oldPswd, const QByteArray &newPswd){
     if(passWordCheck(oldPswd)){
-        QString temp = newPswd + _salt;
-        QByteArray temp1 = QCryptographicHash::hash(temp.toLatin1(), QCryptographicHash::Sha256);
-        if(temp1 != _pswd){
-            _pswd = temp1;
+        if(newPswd != _pswd){
+            _pswd = newPswd;
             emit pswdChanged();
             return true;
         }

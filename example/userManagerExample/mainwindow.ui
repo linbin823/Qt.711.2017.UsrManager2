@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>912</width>
-    <height>691</height>
+    <width>906</width>
+    <height>760</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>821</width>
-      <height>609</height>
+      <height>685</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_4" columnstretch="2,2,1">
@@ -39,66 +39,33 @@
      <property name="bottomMargin">
       <number>10</number>
      </property>
-     <item row="0" column="1" rowspan="11">
-      <widget class="QTableView" name="UsrInfoList"/>
-     </item>
-     <item row="2" column="2">
-      <layout class="QGridLayout" name="gridLayout_5" columnstretch="1,1">
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="lbModifyUsr">
-         <property name="text">
-          <string>修改用户</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="pbModifyUsr">
-         <property name="text">
-          <string>修改用户</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lbUsrName">
-         <property name="text">
-          <string>usrName</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="6" column="2">
-      <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,1">
-       <item row="1" column="1">
-        <widget class="QPushButton" name="pbLogOut">
-         <property name="text">
-          <string>log out</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="leUsrID"/>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="lbLogOut">
-         <property name="text">
-          <string>用户登出</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <item row="9" column="2">
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item row="0" column="2">
       <layout class="QGridLayout" name="gridLayout" columnstretch="1,1">
-       <item row="3" column="0" colspan="2">
-        <widget class="QSpinBox" name="cbNewUsrLevel"/>
-       </item>
        <item row="5" column="0">
         <widget class="QPushButton" name="pbAdd">
          <property name="text">
           <string>add</string>
          </property>
         </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="leNewUsrName"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="leNewUsrDescript"/>
        </item>
        <item row="5" column="1">
         <widget class="QPushButton" name="pbDel">
@@ -107,21 +74,46 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QLineEdit" name="leNewUsrName"/>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>用户名</string>
+         </property>
+        </widget>
        </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QLineEdit" name="leNewUsrDescript"/>
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="cbNewUsrLevel"/>
        </item>
-       <item row="0" column="0" colspan="2">
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>用户等级</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>密码</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="leNewUsrPswd"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>用户描述</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
         <widget class="QLabel" name="lbAddDelUsr">
          <property name="text">
           <string>新增/删除用户</string>
          </property>
         </widget>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QLineEdit" name="leNewUsrPswd"/>
        </item>
       </layout>
      </item>
@@ -158,6 +150,52 @@
        </property>
       </spacer>
      </item>
+     <item row="6" column="2">
+      <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,1">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pbLogOut">
+         <property name="text">
+          <string>log out</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="leUsrID"/>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="lbLogOut">
+         <property name="text">
+          <string>用户登出</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="2">
+      <layout class="QGridLayout" name="gridLayout_5" columnstretch="1,1">
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="lbModifyUsr">
+         <property name="text">
+          <string>修改用户</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pbModifyUsr">
+         <property name="text">
+          <string>修改用户</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lbUsrName">
+         <property name="text">
+          <string>usrName</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item row="5" column="2">
       <spacer name="verticalSpacer_2">
        <property name="orientation">
@@ -170,6 +208,40 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="7" column="2">
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="8" column="2">
+      <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,1">
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="leUsrID_2"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pbCheck">
+         <property name="text">
+          <string>check</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="lbLogCheck">
+         <property name="text">
+          <string>登录检查</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="4" column="2">
       <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1,1,1" columnminimumwidth="0,0,0,0">
@@ -233,55 +305,11 @@
        </item>
       </layout>
      </item>
-     <item row="0" column="0" rowspan="11">
+     <item row="0" column="0" rowspan="4" colspan="2">
       <widget class="QTableView" name="UsrInfoOnlineList"/>
      </item>
-     <item row="7" column="2">
-      <spacer name="verticalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="8" column="2">
-      <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,1">
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="leUsrID_2"/>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="pbCheck">
-         <property name="text">
-          <string>check</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="lbLogCheck">
-         <property name="text">
-          <string>登录检查</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="9" column="2">
-      <spacer name="verticalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
+     <item row="4" column="0" rowspan="7" colspan="2">
+      <widget class="QTableView" name="UsrInfoList"/>
      </item>
     </layout>
    </widget>
@@ -291,7 +319,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>912</width>
+     <width>906</width>
      <height>28</height>
     </rect>
    </property>
@@ -318,6 +346,26 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>leNewUsrName</tabstop>
+  <tabstop>leNewUsrPswd</tabstop>
+  <tabstop>cbNewUsrLevel</tabstop>
+  <tabstop>leNewUsrDescript</tabstop>
+  <tabstop>pbAdd</tabstop>
+  <tabstop>pbDel</tabstop>
+  <tabstop>pbModifyUsr</tabstop>
+  <tabstop>pbLogIn</tabstop>
+  <tabstop>leUsrName</tabstop>
+  <tabstop>leUsrPswd</tabstop>
+  <tabstop>leOnlineUsrInfo</tabstop>
+  <tabstop>leUsrID</tabstop>
+  <tabstop>pbLogOut</tabstop>
+  <tabstop>leUsrID_2</tabstop>
+  <tabstop>pbCheck</tabstop>
+  <tabstop>pbRefresh</tabstop>
+  <tabstop>UsrInfoOnlineList</tabstop>
+  <tabstop>UsrInfoList</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
