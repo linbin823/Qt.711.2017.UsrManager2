@@ -1,5 +1,14 @@
 用户管理器2
-2017.5
+v2.01 2017.6
+修改：
+1、配合网页的通用加密方式，修改密码存储加密方式为：algorith(algorith(pswd) + name) , 其中algorith = MD5
+2、前台到后台传输时加密
+3、密码使用QByteArray传输
+4、其他适配的修改。
+新增：
+1、内置的基于widget的管理UI
+
+v2.0 2017.5
 功能：
 1、多用户登录、登出
 2、用户管理，用户的添加、删除和修改
@@ -8,9 +17,11 @@
 5、加密存储
 
 机制描述：
-用户程序调用登录函数后，如果登录成功则可以获得一个usrID，否则返回0。
-用户可以使用该usrID来验证是否通过登录。
-用户管理器维护一个已登录的用户列表。
+1、用户程序调用登录函数后，如果登录成功则可以获得一个usrID，否则返回0。
+2、用户可以使用该usrID来验证是否通过登录。
+3、用户管理器维护一个已登录的用户列表。
+4、等级必须大于等于1，小于等于200。
+5、本模块不负责定义每个等级所对应的权限，仅提供一个等级数字。
 
 特殊要求：
 能与QML交互、能与QWebChannel交互。
@@ -42,17 +53,17 @@ API说明
     功能：检查是否登录。
     描述：输入usrID，若usrID已登录，返回true，否则返回false
 
-    QObject* getUsrInfoOnline( int usrID );
+    QObject* usrInfoOnline( int usrID );
     功能：查询在线用户信息
     描述：返回一个在线用户信息的实例指针。在线用户信息包含动态的登录信息，该对象由UsrManager管理，不允私自许删除！
     备注：为了方便在QML中使用，返回的指针降级为QObject*。在C++中使用时，可以用static_cast<UsrInfoOnline*> 静态转换。
 
-    QObject* getUsrInfo( const QString& name );
+    QObject* usrInfo( const QString& name );
     功能：获取离线用户信息
     描述：输入用户名，返回一个离线用户信息的实例指针。离线用户信息包含离线的用户名、密码、描述等。该对象由UsrManager管理，不允私自许删除！若找不到离线用户信息，则返回nullptr！
     备注：为了方便在QML中使用，返回的指针降级为QObject*。在C++中使用时，可以用static_cast<UsrInfo*> 静态转换。
 
-    QObject* getUsrInfo( int usrID );
+    QObject* usrInfo( int usrID );
     功能：获取离线用户信息（重载）
     描述：某个登录的usrID。若找不到离线用户信息，或usrID未登录，则返回nullptr！
 
@@ -81,19 +92,28 @@ API说明
     功能：删除用户
     描述：删除用户。输入要删除的用户名称。删除成功返回true。否则返回false。
 
-    QList<QObject*> getAllUsrInfo(void);
+    QList<QObject*> allUsrInfo(void);
     功能：获得用户列表
     描述：获得用户列表。列表中的对象由UsrManager管理，不允私自许删除！
     备注：为了方便在QML中使用，返回的指针降级为QObject*。在C++中使用时，可以用static_cast<UsrInfo*> 静态转换。
 
-    QList<QObject*> getAllUsrInfoOnline(void);
+    QList<QObject*> allUsrInfoOnline(void);
     功能：获得在线用户列表
     描述：获得在线用户列表。列表中的对象由UsrManager管理，不允私自许删除！
     备注：为了方便在QML中使用，返回的指针降级为QObject*。在C++中使用时，可以用static_cast<UsrInfoOnline*> 静态转换。
 
-    int activeUsrNumber(void);
-    功能：用户数量统计
+    int activeOnlineUsrNumber(void);
+    功能：在线活动的用户数量统计
     描述：返回活动的用户数量
+
+    int totalOnlineUsrNumber(void);
+    功能：在线用户总数统计
+    描述：返回在线用户总数
+
+    int offlineUsrNumber(void);
+    功能：用户级别数量统计
+    描述：返回用户级别数量
+
 
     virtual void save(iLoadSaveProcessor* processor);
     功能：保存接口
@@ -117,10 +137,11 @@ API说明
 
 
     int level(void) const;
-    功能：查询等级
+    功能：查询等级。等级必须大于等于1，小于等于200。
 
     bool setLevel(const quint8& newLevel, const QByteArray& pwd);
     (2017.06.14modify)功能：修改等级，成功返回ture，否则返回false
+    等级必须大于等于1，小于等于200。
 
     QString usrDescript(void)const;
     功能：查询用户描述
@@ -170,7 +191,7 @@ API说明
     QDateTime activeTime(void)const;
     功能：获取最后活动时间。
 
-    bool setActiveTime(void);
-    功能：设置当前时间为最后活动时间。
+    bool setActiveTime(long sec);
+    功能：设置当前时间为最后活动时间。然后把失效时间往后推sec秒。
 
 

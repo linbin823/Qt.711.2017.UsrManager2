@@ -1,13 +1,15 @@
-﻿#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include <QStandardItemModel>
+#include <QMessageBox>
+#include "usrmanagerui.h"
+#include "ui_usrmanagerui.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+UsrManagerUI::UsrManagerUI(UsrManager *mgr, QWidget *parent) :
+    QWidget(parent),_mgr(mgr),
+    ui(new Ui::UsrManagerUI)
 {
     ui->setupUi(this);
-    ui->centralWidget->setLayout( ui->gridLayout_4 );
-    ui->centralWidget->setWindowTitle("测试example");
+    setLayout( ui->gridLayout );
+    setWindowTitle( tr("用户管理") );
 
     _manager = UsrManager::Instance();
 
@@ -21,44 +23,29 @@ MainWindow::MainWindow(QWidget *parent) :
     title<<tr("用户名")<<tr("用户ID")<<tr("在线识别信息")<<tr("最后活动时间")<<tr("过期时间")<<tr("登录时间");
     _UsrInfoOnlineModel->setHorizontalHeaderLabels( title );
 
-    connect(_manager,SIGNAL(msgUsrInfoListChanged()),this,SLOT(refreshUsrInfo()));
-    connect(_manager,SIGNAL(msgUsrInfoOnlineListChanged()),this,SLOT(refreshUsrInfoOnline()));
+    connect(_manager,&UsrManager::msgUsrInfoListChanged,
+            this,&UsrManagerUI::refreshUsrInfo);
+    connect(_manager,&UsrManager::msgUsrInfoOnlineListChanged,
+            this,&UsrManagerUI::refreshUsrInfoOnline);
 
-    _modifyInfo = new ModifyUsrInfo();
-    _modifyInfo->hide();
+    connect(_manager,&UsrManager::msgTimeOutAftLogInChanged,
+            this,&UsrManagerUI::_refreshTimeOutAftLogIn);
+    _refreshTimeOutAftLogIn( _manager->timeOutAftLogIn() );
 
-    ui->UsrInfoList->setModel(_UsrInfoModel);
-    ui->UsrInfoOnlineList->setModel(_UsrInfoOnlineModel);
+    _usrAdd = nullptr;
+    _usrEvents = new UsrManagerUI_events();
+    _usrModify = nullptr;
+
+    ui->tvUsrInfoList->setModel(_UsrInfoModel);
+    ui->tvUsrInfoOnlineList->setModel(_UsrInfoOnlineModel);
 }
 
-MainWindow::~MainWindow()
+UsrManagerUI::~UsrManagerUI()
 {
-    _manager->deleteLater();
-    _UsrInfoModel->deleteLater();
-    _UsrInfoOnlineModel->deleteLater();
     delete ui;
 }
 
-void MainWindow::on_pbLogIn_clicked()
-{
-    QString msgText;
-    int usrID = _manager->logIn( ui->leUsrName->text(), ui->leUsrPswd->text(), ui->leOnlineUsrInfo->text() );
-
-    QMessageBox msgBox;
-    if(usrID != 0) msgText = "log in successful!";
-    else msgText = "log in failed!";
-    msgBox.setText( msgText );
-    msgBox.exec();
-
-    ui->lbUsrID_res->setText( QString::number(usrID) );
-}
-
-void MainWindow::on_pbLogOut_clicked()
-{
-    _manager->logOut( ui->leUsrID->text().toInt() );
-}
-
-void MainWindow::refreshUsrInfoOnline(){
+void UsrManagerUI::refreshUsrInfoOnline(){
     QList<UsrInfoOnline*> list;
     QList<QObject* > temp = _manager->allUsrInfoOnline();
     foreach(QObject* t, temp){
@@ -129,7 +116,7 @@ void MainWindow::refreshUsrInfoOnline(){
     _UsrInfoOnlineModel->removeRows(i, _UsrInfoOnlineModel->rowCount() - i);
 }
 
-void MainWindow::refreshUsrInfo(){
+void UsrManagerUI::refreshUsrInfo(){
     QList<UsrInfo*> list;
     QList<QObject* > temp = _manager->allUsrInfo();
     foreach(QObject* t, temp){
@@ -171,70 +158,94 @@ void MainWindow::refreshUsrInfo(){
     _UsrInfoModel->removeRows(i, _UsrInfoModel->rowCount() - i);
 }
 
-void MainWindow::on_pbRefresh_clicked()
+void UsrManagerUI::on_pbAdd_clicked()
 {
-    refreshUsrInfo();
-    refreshUsrInfoOnline();
-}
-
-void MainWindow::on_pbDel_clicked()
-{
-    int currentRow = ui->UsrInfoList->currentIndex().row();
-    if(currentRow >0){
-        QString name = _UsrInfoModel->item(currentRow,0)->text();
-        _manager->deleteUsr( name );
+    if(_usrAdd == nullptr){
+        _usrAdd = new UsrManagerUI_add();
     }
+    _usrAdd->show();
 }
 
-
-void MainWindow::on_pbAdd_clicked()
+void UsrManagerUI::on_tvUsrInfoOnlineList_clicked(const QModelIndex &index)
 {
-    QString newName = ui->leNewUsrName->text();
-    QString newPswd = ui->leNewUsrPswd->text();
-    int newLevel = ui->cbNewUsrLevel->value();
-    QString newDescript = ui->leNewUsrDescript->text();
-
-    QString msgText;
-
-    QObject* ret =_manager->addUsr(newName, newLevel, newPswd, newDescript);
-
-    QMessageBox msgBox;
-    if(ret!= nullptr) msgText = "add usr successful!";
-    else msgText = "add usr failed!";
-    msgBox.setText( msgText );
-    msgBox.exec();
-}
-
-void MainWindow::on_pbCheck_clicked()
-{
-    bool ok = _manager->isLogIn( ui->leUsrID_2->text().toInt() );
-    int level = _manager->checkLogInLevel( ui->leUsrID_2->text().toInt() );
-
-    QString msgText;
-    QMessageBox msgBox;
-    if(ok) msgText = QString("already log in, level is %1!").arg(level);
-    else msgText = QString("not log in!").arg(level);
-    msgBox.setText( msgText );
-    msgBox.exec();
-}
-
-void MainWindow::on_pbModifyUsr_clicked()
-{
-    int currentRow = ui->UsrInfoList->currentIndex().row();
+    int currentRow = index.row();
     if(currentRow >=0){
-        QString name = _UsrInfoModel->item(currentRow,0)->text();
-        UsrInfo* info = static_cast<UsrInfo*>(_manager->usrInfo( name ) );
-        _modifyInfo->setUsrInfo( info );
-        _modifyInfo->show();
+        QString name = _UsrInfoOnlineModel->item(currentRow,0)->text();
+        ui->lbSelectUsrNameDisplay->setText( name );
     }
 }
 
-void MainWindow::on_UsrInfoList_clicked(const QModelIndex &index)
+void UsrManagerUI::on_tvUsrInfoList_clicked(const QModelIndex &index)
 {
     int currentRow = index.row();
     if(currentRow >=0){
         QString name = _UsrInfoModel->item(currentRow,0)->text();
-        UsrInfo* info = static_cast<UsrInfo*>(_manager->usrInfo( name ) );
-        ui->lbUsrName->setText( info->name() );
+        ui->lbSelectUsrNameDisplay->setText( name );
     }
+}
+
+void UsrManagerUI::on_pbModify_clicked()
+{
+    int currentRow = ui->tvUsrInfoList->currentIndex().row();
+    if(currentRow >=0){
+        QString name = _UsrInfoModel->item(currentRow,0)->text();
+        UsrInfo* t = static_cast<UsrInfo*>(_manager->usrInfo( name ) );
+        if(t!= nullptr){
+            if(_usrModify == nullptr){
+                _usrModify = new usrManagerUI_modify();
+            }
+            _usrModify->setUsrInfo(t);
+            _usrModify->show();
+        }
+    }
+}
+
+void UsrManagerUI::on_pbEvent_clicked()
+{
+    _usrEvents->show();
+}
+
+void UsrManagerUI::on_pbCancel_clicked()
+{
+    this->hide();
+}
+
+void UsrManagerUI::on_pbDel_clicked()
+{
+    int currentRow = ui->tvUsrInfoList->currentIndex().row();
+    bool ret = false;
+    if(currentRow >=0){
+        QString name = _UsrInfoModel->item(currentRow,0)->text();
+        ret = _manager->deleteUsr( name );
+    }
+
+    QMessageBox msgBox;
+    QString msgText;
+    if(ret) msgText = "del usr successful!";
+    else msgText = "del usr failed!";
+    msgBox.setText( msgText );
+    msgBox.exec();
+}
+
+void UsrManagerUI::on_pbLogout_clicked()
+{
+    int currentRow = ui->tvUsrInfoOnlineList->currentIndex().row();
+    if(currentRow >=0){
+        int usrID = _UsrInfoOnlineModel->item(currentRow,1)->text().toInt();
+        _manager->logOut( usrID );
+    }
+}
+
+void UsrManagerUI::on_pbLogoutAll_clicked()
+{
+    _manager->logOutAll();
+}
+
+void UsrManagerUI::on_pbTimeOverDelaySet_clicked()
+{
+    _manager->setTimeOutAftLogIn( ui->sbTimeOverDelay->value() );
+}
+
+void UsrManagerUI::_refreshTimeOutAftLogIn(long newValue){
+    ui->sbTimeOverDelay->setValue( newValue );
 }

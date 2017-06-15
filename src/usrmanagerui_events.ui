@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UsrManagerUI_events</class>
+ <widget class="QWidget" name="UsrManagerUI_events">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>40</y>
+     <width>160</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="leftMargin">
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>10</number>
+    </property>
+    <property name="bottomMargin">
+     <number>10</number>
+    </property>
+    <item>
+     <widget class="QPlainTextEdit" name="plainTextEdit">
+      <property name="acceptDrops">
+       <bool>false</bool>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pbCancel">
+      <property name="text">
+       <string>返回</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pbSaveTo">
+      <property name="text">
+       <string>保存</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pbClear">
+      <property name="text">
+       <string>清空</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,3 +1,4 @@
+#include "usrmanager.h"
 #include "mainwindow.h"
 #include <QApplication>
 
@@ -7,5 +8,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
+    UsrManager::Instance()->showUI();
     return a.exec();
 }

@@ -40,7 +40,7 @@ public slots:
     bool setLoginTime(void);
     //get last active time
     QDateTime activeTime(void)const;
-    bool setActiveTime(void);
+    bool setActiveTime(long sec );
 
 private:
     int         _usrID;

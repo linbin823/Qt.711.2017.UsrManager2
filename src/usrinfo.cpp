@@ -18,7 +18,7 @@ UsrInfo::UsrInfo(QObject *parent, QCryptographicHash::Algorithm alg):
     _name = "undefined";
     _pswd = QCryptographicHash::hash( QString("").toUtf8() , _alg);
     _pswd = QCryptographicHash::hash( (_pswd + _name.toUtf8() ), _alg);
-    _level = 0;
+    _level = 1;
 }
 
 /*
@@ -115,11 +115,12 @@ bool UsrInfo::setName(const QString& newName, const QString &pwdWithoutCrypto){
  * 2、testPswd 测试密码
  * 返回数值：
  * 1、成功返回ture，否则返回false
+ * 2、Level必须大于等于1，小于等于200
  * 功能描述：
  */
 bool UsrInfo::setLevel(int newLevel, const QByteArray &pwd){
     if(passWordCheck(pwd)){
-        if(_level!=newLevel){
+        if(_level!=newLevel && newLevel >=1 && newLevel <=200 ){
             _level = newLevel;
             emit levelChanged();
             return true;

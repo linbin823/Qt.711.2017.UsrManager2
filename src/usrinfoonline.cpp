@@ -92,7 +92,8 @@ bool UsrInfoOnline::setLoginTime(void){
 QDateTime UsrInfoOnline::activeTime(void)const{
     return _activeTime;
 }
-bool UsrInfoOnline::setActiveTime(void){
+bool UsrInfoOnline::setActiveTime(long sec){
     _activeTime = QDateTime::currentDateTime();
+    _expireTime = _activeTime.addSecs(sec);
     return true;
 }

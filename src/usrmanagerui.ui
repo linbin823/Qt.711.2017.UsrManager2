@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UsrManagerUI</class>
+ <widget class="QWidget" name="UsrManagerUI">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>648</width>
+    <height>559</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>531</width>
+     <height>478</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>10</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>10</number>
+    </property>
+    <property name="bottomMargin">
+     <number>10</number>
+    </property>
+    <item row="4" column="0" colspan="2">
+     <widget class="QTableView" name="tvUsrInfoOnlineList"/>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QTableView" name="tvUsrInfoList"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="lbUsrInfoOnlineList">
+      <property name="text">
+       <string>用户列表</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="lbUsrInfoList">
+      <property name="text">
+       <string>在线用户列表</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <layout class="QGridLayout" name="gridLayout_8">
+      <item row="6" column="0">
+       <widget class="QPushButton" name="pbLogoutAll">
+        <property name="text">
+         <string>全部登出</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QPushButton" name="pbEvent">
+        <property name="text">
+         <string>查看事件</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lbSelectOnlineUsrName">
+        <property name="text">
+         <string>当前选择在线用户：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="pbLogout">
+        <property name="text">
+         <string>登出</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lbSelectOnlineUsrNameDisplay">
+        <property name="text">
+         <string>no select</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="2">
+     <layout class="QGridLayout" name="gridLayout_7">
+      <item row="1" column="0">
+       <widget class="QLabel" name="lbSelectUsrNameDisplay">
+        <property name="text">
+         <string>no select</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="pbAdd">
+        <property name="text">
+         <string>新增用户</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lbSelectUsrName">
+        <property name="text">
+         <string>当前选择用户：</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="pbModify">
+        <property name="text">
+         <string>修改用户</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QPushButton" name="pbDel">
+        <property name="text">
+         <string>删除用户</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>登录有效时间(秒)：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="sbTimeOverDelay">
+        <property name="maximum">
+         <number>999999999</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbTimeOverDelaySet">
+        <property name="text">
+         <string>设置</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="6" column="2">
+     <widget class="QPushButton" name="pbCancel">
+      <property name="text">
+       <string>关闭</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>pbAdd</tabstop>
+  <tabstop>pbModify</tabstop>
+  <tabstop>pbDel</tabstop>
+  <tabstop>pbLogout</tabstop>
+  <tabstop>pbLogoutAll</tabstop>
+  <tabstop>pbEvent</tabstop>
+  <tabstop>tvUsrInfoList</tabstop>
+  <tabstop>tvUsrInfoOnlineList</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
