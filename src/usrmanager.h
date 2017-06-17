@@ -34,14 +34,14 @@ public:
     ~UsrManager();
 public slots:
     //查询登录状态，输入usrID，返回权限等级
-    int checkLogInLevel( int usrID );
+    int checkLogInLevel( QByteArray usrID );
     //usrID已登录，返回true，否则返回false
-    bool isLogIn( int usrID );
+    bool isLogIn( QByteArray usrID );
     //查询在线信息
-    QObject* usrInfoOnline( int usrID );
+    QObject* usrInfoOnline( QByteArray usrID );
     //获取用户信息
     QObject* usrInfo( const QString& name );
-    QObject* usrInfo( int usrID );
+    QObject* usrInfo( QByteArray usrID );
     //查询单次登录的有效期（秒）
     long timeOutAftLogIn(){
         return _secsTimeOutAftLogIn;
@@ -50,9 +50,9 @@ public slots:
     void setTimeOutAftLogIn(long newValue);
 
     //登录，返回usrID
-    int logIn( const QString& usrName, const QString& usrPwd, const QString& onlineUsrInfo );
+    QByteArray logIn( const QString& usrName, const QString& usrPwd, const QString& onlineUsrInfo );
     //登出
-    void logOut( int usrID );
+    void logOut( QByteArray usrID );
     //全部登出
     void logOutAll(void);
 
@@ -92,7 +92,7 @@ private:
     UsrManagerUI* _pUI;
 
     //生成UsrID
-    int  _usrIDGen(void)const;
+    QByteArray  _usrIDGen(void)const;
 
     void _usrInfoInit(void);
 

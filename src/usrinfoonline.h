@@ -13,11 +13,11 @@ class UsrInfoOnline :  public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int       usrID          READ usrID)
-    Q_PROPERTY(QString   onlineUsrInfo  READ onlineUsrInfo  WRITE setOnlineUsrInfo)
-    Q_PROPERTY(QDateTime expireTime     READ expireTime     WRITE setExpireTime)
-    Q_PROPERTY(QDateTime loginTime      READ loginTime)
-    Q_PROPERTY(QDateTime activeTime     READ activeTime)
+    Q_PROPERTY(QByteArray   usrID          READ usrID)
+    Q_PROPERTY(QString      onlineUsrInfo  READ onlineUsrInfo  WRITE setOnlineUsrInfo)
+    Q_PROPERTY(QDateTime    expireTime     READ expireTime     WRITE setExpireTime)
+    Q_PROPERTY(QDateTime    loginTime      READ loginTime)
+    Q_PROPERTY(QDateTime    activeTime     READ activeTime)
 
 public:
     explicit UsrInfoOnline(UsrInfo* usrInfo , QObject *parent = 0);
@@ -27,8 +27,8 @@ public slots:
     //get offline configuration usrInfo.
     QObject* usrInfo(void);
     //get or set usr ID
-    int usrID(void);
-    bool setUsrID(int id);
+    QByteArray usrID(void);
+    bool setUsrID(QByteArray id);
     //get or set online usr infomation
     QString onlineUsrInfo(void)const;
     bool setOnlineUsrInfo(const QString& info);
@@ -43,7 +43,7 @@ public slots:
     bool setActiveTime(long sec );
 
 private:
-    int         _usrID;
+    QByteArray  _usrID;
     UsrInfo*    _usrInfo;
     QString     _onlineUsrInfo;
     QDateTime   _expireTime,_loginTime,_activeTime;

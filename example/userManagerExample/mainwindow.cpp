@@ -42,20 +42,20 @@ MainWindow::~MainWindow()
 void MainWindow::on_pbLogIn_clicked()
 {
     QString msgText;
-    int usrID = _manager->logIn( ui->leUsrName->text(), ui->leUsrPswd->text(), ui->leOnlineUsrInfo->text() );
+    QByteArray usrID = _manager->logIn( ui->leUsrName->text(), ui->leUsrPswd->text(), ui->leOnlineUsrInfo->text() );
 
     QMessageBox msgBox;
-    if(usrID != 0) msgText = "log in successful!";
+    if(usrID != QByteArray() ) msgText = "log in successful!";
     else msgText = "log in failed!";
     msgBox.setText( msgText );
     msgBox.exec();
 
-    ui->lbUsrID_res->setText( QString::number(usrID) );
+    ui->lbUsrID_res->setText( QString(usrID) );
 }
 
 void MainWindow::on_pbLogOut_clicked()
 {
-    _manager->logOut( ui->leUsrID->text().toInt() );
+    _manager->logOut( ui->leUsrID->text().toUtf8() );
 }
 
 void MainWindow::refreshUsrInfoOnline(){
@@ -80,10 +80,10 @@ void MainWindow::refreshUsrInfoOnline(){
 
         item = _UsrInfoOnlineModel->item(i,1);
         if(item){
-            item->setText( QString::number(list.at(i)->usrID()) );
+            item->setText( QString(list.at(i)->usrID()) );
         }
         else{
-            item = new QStandardItem( QString::number(list.at(i)->usrID()) );
+            item = new QStandardItem( QString(list.at(i)->usrID()) );
         }
         _UsrInfoOnlineModel->setItem(i,1,item);
 
@@ -207,8 +207,8 @@ void MainWindow::on_pbAdd_clicked()
 
 void MainWindow::on_pbCheck_clicked()
 {
-    bool ok = _manager->isLogIn( ui->leUsrID_2->text().toInt() );
-    int level = _manager->checkLogInLevel( ui->leUsrID_2->text().toInt() );
+    bool ok = _manager->isLogIn( ui->leUsrID_2->text().toUtf8() );
+    int level = _manager->checkLogInLevel( ui->leUsrID_2->text().toUtf8() );
 
     QString msgText;
     QMessageBox msgBox;

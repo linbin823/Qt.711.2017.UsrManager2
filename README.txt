@@ -1,4 +1,9 @@
 用户管理器2
+v2.02 2017.6
+修改：
+1、把UsrID改成QByteArray， 使用UDID生成
+2、其他适配的修改。
+
 v2.01 2017.6
 修改：
 1、配合网页的通用加密方式，修改密码存储加密方式为：algorith(algorith(pswd) + name) , 其中algorith = MD5
@@ -45,15 +50,15 @@ API说明
 ---------------------------------------------------------------------------------------
 一、UsrManager calss
 
-    int checkLogInLevel( int usrID );
+    int checkLogInLevel( QByteArray usrID );
     功能：检查登录的等级。
     描述：输入usrID，返回登录的等级。登录的等级是一个0或正整数。数字越大等级越高。本模块不负责定义每个等级所对应的权限，仅提供一个等级数字。返回值为0说明该usrID没有登录，或登录的用户设置的权限最低，如Guest用户。
 
-    bool isLogIn( int usrID );
+    bool isLogIn( QByteArray usrID );
     功能：检查是否登录。
     描述：输入usrID，若usrID已登录，返回true，否则返回false
 
-    QObject* usrInfoOnline( int usrID );
+    QObject* usrInfoOnline( QByteArray usrID );
     功能：查询在线用户信息
     描述：返回一个在线用户信息的实例指针。在线用户信息包含动态的登录信息，该对象由UsrManager管理，不允私自许删除！
     备注：为了方便在QML中使用，返回的指针降级为QObject*。在C++中使用时，可以用static_cast<UsrInfoOnline*> 静态转换。
@@ -63,19 +68,19 @@ API说明
     描述：输入用户名，返回一个离线用户信息的实例指针。离线用户信息包含离线的用户名、密码、描述等。该对象由UsrManager管理，不允私自许删除！若找不到离线用户信息，则返回nullptr！
     备注：为了方便在QML中使用，返回的指针降级为QObject*。在C++中使用时，可以用static_cast<UsrInfo*> 静态转换。
 
-    QObject* usrInfo( int usrID );
+    QObject* usrInfo( QByteArray usrID );
     功能：获取离线用户信息（重载）
     描述：某个登录的usrID。若找不到离线用户信息，或usrID未登录，则返回nullptr！
 
-    int logIn( const QString& usrName, const QString& usrPwd, const QString& onlineUsrInfo );
+    QByteArray logIn( const QString& usrName, const QString& usrPwd, const QString& onlineUsrInfo );
     功能：登录
     描述：输入登录的用户名、密码和在线识别信息，返回登录的usrID。产生几种结果：
-    1、找不到用户名和密码，返回的usrID等于0。
+    1、找不到用户名和密码，返回的usrID等于QByteArray()。
     2、用户名或密码错误，返回的usrID等于0。等同于情况1。
     3、用户名密码正确，与之前的在线登录的在线识别信息完全一致。属于重复登录。返回已存在的登录的usrID。更新登录时间、活动时间和失效时间。
     4、用户名密码正确，识别信息独一无二。属于新登录。记录新的登录信息，并返回一个新生成的usrID。更新登录时间、活动时间和失效时间。
 
-    void logOut( int usrID );
+    void logOut( QByteArray usrID );
     功能：登出
     描述：登出某个登录的usrID。注意：仅修改失效时间，并不会删除记录。
 
@@ -162,10 +167,10 @@ API说明
     描述：每个在线用户信息都包含一个指针，指向与之对应的离线用户信息。该函数可以返回一个离线用户信息的实例指针。该对象由UsrManager管理，不允私自许删除！
     备注：为了方便在QML中使用，返回的指针降级为QObject*。在C++中使用时，可以用static_cast<UsrInfo*> 静态转换。
 
-    int usrID(void);
+    QByteArray usrID(void);
     功能：查询usrID。usrID由UsrManager动态生成和分配。
 
-    bool setUsrID(int id);
+    bool setUsrID(QByteArray id);
     功能：设置usrID。该功能只能由UsrManager使用。
 
     QString onlineUsrInfo(void)const;

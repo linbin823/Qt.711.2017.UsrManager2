@@ -44,11 +44,11 @@ QObject* UsrInfoOnline::usrInfo(void){
 }
 
 //get or set usr ID
-int UsrInfoOnline::usrID(void){
+QByteArray UsrInfoOnline::usrID(void){
     return _usrID;
 }
 
-bool UsrInfoOnline::setUsrID(int id){
+bool UsrInfoOnline::setUsrID(QByteArray id){
     if(_usrID != id){
         _usrID = id;
         return true;

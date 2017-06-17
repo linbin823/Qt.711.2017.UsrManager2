@@ -2,6 +2,7 @@
 #pragma execution_character_set("utf-8")
 #endif
 
+#include <QUuid>
 #include <QQmlEngine>
 #include "usrmanager.h"
 #include "usrmanagerui.h"
@@ -53,36 +54,36 @@ UsrManager::~UsrManager(){
 }
 
 //查询登录状态，输入usrID，返回权限等级
-int UsrManager::checkLogInLevel( int usrID ){
+int UsrManager::checkLogInLevel(QByteArray usrID ){
     foreach( UsrInfoOnline* t, _usrInfoOnlineList){
         if(t->usrID() == usrID )
             if( t->expireTime() >= QDateTime::currentDateTime() ){
                 t->setActiveTime( _secsTimeOutAftLogIn );
                 int level = static_cast<UsrInfo*>(t->usrInfo())->level();
-                emit msgEventString( tr("在线查询结果：用户“%1”已登录，等级为%2。").arg(usrID).arg(level) );
+                emit msgEventString( tr("在线查询结果：用户“%1”已登录，等级为%2。").arg( QString(usrID) ).arg(level) );
                 return level;
             }
     }
-    emit msgEventString( tr("在线查询结果：用户“%1”未登录。").arg(usrID) );
+    emit msgEventString( tr("在线查询结果：用户“%1”未登录。").arg( QString(usrID) ) );
     return 0;
 }
 
 //usrID已登录，返回true，否则返回false
-bool UsrManager::isLogIn( int usrID ){
+bool UsrManager::isLogIn(QByteArray usrID ){
     foreach( UsrInfoOnline* t, _usrInfoOnlineList){
         if(t->usrID() == usrID )
             if( t->expireTime() >= QDateTime::currentDateTime() ){
                 t->setActiveTime( _secsTimeOutAftLogIn );
-                emit msgEventString( tr("在线查询结果：用户“%1”已登录。").arg(usrID) );
+                emit msgEventString( tr("在线查询结果：用户“%1”已登录。").arg( QString(usrID) ) );
                 return true;
             }
     }
-    emit msgEventString( tr("在线查询结果：用户“%1”未登录。").arg(usrID) );
+    emit msgEventString( tr("在线查询结果：用户“%1”未登录。").arg( QString(usrID) ) );
     return false;
 }
 
 //查询在线信息
-QObject* UsrManager::usrInfoOnline( int usrID ){
+QObject* UsrManager::usrInfoOnline(QByteArray usrID ){
     foreach( UsrInfoOnline* t, _usrInfoOnlineList){
         if(t->usrID() == usrID ){
             t->setActiveTime( _secsTimeOutAftLogIn );
@@ -104,7 +105,7 @@ QObject* UsrManager::usrInfo( const QString& name ){
     return nullptr;
 }
 
-QObject* UsrManager::usrInfo( int usrID ){
+QObject* UsrManager::usrInfo(QByteArray usrID ){
     foreach( UsrInfoOnline* t, _usrInfoOnlineList){
         if(t->usrID() == usrID ){
             t->setActiveTime( _secsTimeOutAftLogIn );
@@ -131,8 +132,8 @@ void UsrManager::setTimeOutAftLogIn(long newValue){
  * 功能描述：
  * 1、把用户名登录信息到UsrInfoOnline
  */
-int UsrManager::logIn( const QString& usrName, const QString& usrPwd, const QString& onlineUsrInfo ){
-    int usrID = 0;
+QByteArray UsrManager::logIn( const QString& usrName, const QString& usrPwd, const QString& onlineUsrInfo ){
+    QByteArray usrID = QByteArray();
     UsrInfo* info;
     foreach( UsrInfoOnline* t, _usrInfoOnlineList){
         info = static_cast<UsrInfo*>(t->usrInfo() );
@@ -146,7 +147,7 @@ int UsrManager::logIn( const QString& usrName, const QString& usrPwd, const QStr
                 emit msgEventString( tr("在线登录：重复登录\n\t时间：%1。\n\t用户名：%2。\n\t用户ID：%3。\n\t在线用户信息：%4。")
                                      .arg( QDateTime::currentDateTime().toString() )
                                      .arg( usrName)
-                                     .arg( usrID)
+                                     .arg( QString(usrID) )
                                      .arg( onlineUsrInfo) );
                 return t->usrID();
             }
@@ -167,7 +168,7 @@ int UsrManager::logIn( const QString& usrName, const QString& usrPwd, const QStr
             emit msgEventString( tr("在线登录：新登录\n\t时间：%1。\n\t用户名：%2。\n\t用户ID：%3。\n\t在线用户信息：%4。")
                                  .arg( QDateTime::currentDateTime().toString() )
                                  .arg( usrName)
-                                 .arg( usrID)
+                                 .arg( QString(usrID))
                                  .arg( onlineUsrInfo) );
             return usrID;
         }
@@ -178,16 +179,16 @@ int UsrManager::logIn( const QString& usrName, const QString& usrPwd, const QStr
 }
 
 //登出
-void UsrManager::logOut( int usrID ){
+void UsrManager::logOut( QByteArray usrID ){
     foreach( UsrInfoOnline* t , _usrInfoOnlineList){
         if( t->usrID() == usrID){
             t->setExpireTime( QDateTime::currentDateTime());
-            emit msgEventString( tr("在线登出：成功，登出'%1'。").arg(usrID) );
+            emit msgEventString( tr("在线登出：成功，登出'%1'。").arg( QString(usrID) ) );
             emit msgUsrInfoOnlineListChanged();
             return;
         }
     }
-    emit msgEventString( tr("在线登出：失败，找不到'%1'。").arg(usrID) );
+    emit msgEventString( tr("在线登出：失败，找不到'%1'。").arg( QString(usrID) ) );
 }
 
 //全部登出
@@ -306,21 +307,22 @@ bool UsrManager::checkName(const QString& newName) const{
 }
 
 //生成UsrID
-int UsrManager::_usrIDGen(void)const{
-    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
-    int usrID = 0;
-    bool duplicatedID = false;
-    while( usrID ==0 || duplicatedID ){
-        usrID = qrand();
-        foreach(UsrInfoOnline* t, this->_usrInfoOnlineList){
-            if(t->usrID() == usrID ){
-                duplicatedID = true;
-                continue;
-            }
-        }
-        duplicatedID = false;
-    }
-    return usrID;
+inline QByteArray UsrManager::_usrIDGen(void)const{
+//    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+//    int usrID = 0;
+//    bool duplicatedID = false;
+//    while( usrID ==0 || duplicatedID ){
+//        usrID = qrand();
+//        foreach(UsrInfoOnline* t, this->_usrInfoOnlineList){
+//            if(t->usrID() == usrID ){
+//                duplicatedID = true;
+//                continue;
+//            }
+//        }
+//        duplicatedID = false;
+//    }
+//    return usrID;
+    return QUuid::createUuid().toByteArray();
 }
 
 void UsrManager::load(iLoadSaveProcessor* processor){
