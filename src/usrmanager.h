@@ -1,16 +1,15 @@
 ﻿#ifndef USRMANAGER_H
 #define USRMANAGER_H
 
+#include "usrinfo.h"
+#include "sessioninfo.h"
+#include "iloadsave.h"
 #include <QObject>
 #include <QList>
 #include <QTimer>
 
-#include "iloadsave.h"
-
 QT_BEGIN_NAMESPACE
 class UsrManagerUI;
-class SessionInfo;
-class UsrInfo;
 QT_END_NAMESPACE
 
 //2017.05重写用户权限管理
@@ -32,11 +31,14 @@ public:
     static UsrManager* Instance();
     ~UsrManager();
 
-    SessionInfo* operator [](const QByteArray& id){
+    SessionInfo& operator [](const QByteArray& id){
         if( _sessionInfoList.contains(id)){
-            return _sessionInfoList[id];
+            return *(_sessionInfoList[id]);
+        }else{
+            static UsrInfo* uErr = new UsrInfo(this);
+            static SessionInfo* sErr = new SessionInfo( uErr,this);
+            return *sErr;
         }
-        return nullptr;
     }
 
 public slots:

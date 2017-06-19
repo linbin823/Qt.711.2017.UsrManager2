@@ -76,8 +76,8 @@ QObject* UsrManager::usrInfo( const QString& name )const{
 }
 
 QObject* UsrManager::usrInfo(const QByteArray &sessionID )const{
-    if( _sessionInfoList.contains(usrID) ){
-        SessionInfo* t = _sessionInfoList[usrID];
+    if( _sessionInfoList.contains(sessionID) ){
+        SessionInfo* t = _sessionInfoList[sessionID];
         UsrInfo* u = t->_usrInfo;
         QQmlEngine::setObjectOwnership(u,QQmlEngine::CppOwnership);
         return u;

@@ -2,9 +2,12 @@
 #define SESSIONINFO_H
 
 #include <QObject>
-#include "usrmanager.h"
+#include "usrinfo.h"
 #include "iloadsave.h"
 
+QT_BEGIN_NAMESPACE
+class UsrManager;
+QT_END_NAMESPACE
 
 /*!
  *  SessionInfo
@@ -25,6 +28,13 @@ class SessionInfo :  public QObject , public iLoadSave
 public:
     explicit SessionInfo(UsrInfo* usrInfo , QObject *parent = 0);
     ~SessionInfo();
+
+    QVariant& operator [](const QString& key){
+        if( !_properties.contains(key)){
+            _properties.insert(key, QVariant());
+        }
+        return _properties[key];
+    }
 
 public slots:
 
