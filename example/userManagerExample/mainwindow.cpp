@@ -1,5 +1,7 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "usrinfo.h"
+#include "sessioninfo.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,33 +18,35 @@ MainWindow::MainWindow(QWidget *parent) :
     title<<tr("用户名")<<tr("等级")<<tr("用户描述");
     _UsrInfoModel->setHorizontalHeaderLabels( title );
 
-    _UsrInfoOnlineModel = new QStandardItemModel(this);
+    _SessionInfoModel = new QStandardItemModel(this);
     title.clear();
-    title<<tr("用户名")<<tr("用户ID")<<tr("在线识别信息")<<tr("最后活动时间")<<tr("过期时间")<<tr("登录时间");
-    _UsrInfoOnlineModel->setHorizontalHeaderLabels( title );
+    title<<tr("会话ID")<<tr("用户名")<<tr("用户等级")<<tr("在线识别信息")<<tr("是否有效")<<tr("最后活动时间")<<tr("过期时间")<<tr("登录时间");
+    _SessionInfoModel->setHorizontalHeaderLabels( title );
 
     connect(_manager,SIGNAL(msgUsrInfoListChanged()),this,SLOT(refreshUsrInfo()));
-    connect(_manager,SIGNAL(msgUsrInfoOnlineListChanged()),this,SLOT(refreshUsrInfoOnline()));
+    connect(_manager,SIGNAL(msgSessionInfoListChanged()),this,SLOT(refreshSessionInfo()));
 
     _modifyInfo = new ModifyUsrInfo();
     _modifyInfo->hide();
 
     ui->UsrInfoList->setModel(_UsrInfoModel);
-    ui->UsrInfoOnlineList->setModel(_UsrInfoOnlineModel);
+    ui->SessionInfoList->setModel(_SessionInfoModel);
 }
 
 MainWindow::~MainWindow()
 {
     _manager->deleteLater();
     _UsrInfoModel->deleteLater();
-    _UsrInfoOnlineModel->deleteLater();
+    _SessionInfoModel->deleteLater();
     delete ui;
 }
 
 void MainWindow::on_pbLogIn_clicked()
 {
     QString msgText;
-    QByteArray usrID = _manager->logIn( ui->leUsrName->text(), ui->leUsrPswd->text(), ui->leOnlineUsrInfo->text() );
+    QByteArray usrID = _manager->logIn( ui->leUsrName->text(),
+                                        UsrInfo::genCryptoString( ui->leUsrName->text(), ui->leUsrPswd->text() ),
+                                        ui->leOnlineUsrInfo->text() );
 
     QMessageBox msgBox;
     if(usrID != QByteArray() ) msgText = "log in successful!";
@@ -58,112 +62,118 @@ void MainWindow::on_pbLogOut_clicked()
     _manager->logOut( ui->leUsrID->text().toUtf8() );
 }
 
-void MainWindow::refreshUsrInfoOnline(){
-    QList<UsrInfoOnline*> list;
-    QList<QObject* > temp = _manager->allUsrInfoOnline();
-    foreach(QObject* t, temp){
-        list << static_cast<UsrInfoOnline*>(t);
-    }
+void MainWindow::refreshSessionInfo(){
+    QHash<QByteArray,SessionInfo*>& temp(_manager->allSessionInfo() );
     QStandardItem* item;
     int i;
-
-//    qDebug()<<"MainWindow::refreshData"<<_UsrInfoModel->rowCount()<<list.size();
-    for(i=0 ; i< list.size(); i++){
-        item = _UsrInfoOnlineModel->item(i,0);
+    for(i=0 ; i< temp.size(); i++){
+        item = _SessionInfoModel->item(i,0);
         if(item){
-            item->setText( static_cast<UsrInfo*>(list.at(i)->usrInfo())->name() );
+            item->setText( QString::fromUtf8(temp.keys()[i]) );
         }
         else{
-            item = new QStandardItem( static_cast<UsrInfo*>(list.at(i)->usrInfo())->name() );
+            item = new QStandardItem( QString::fromUtf8(temp.keys()[i]) );
+            _SessionInfoModel->setItem(i,0,item);
         }
-        _UsrInfoOnlineModel->setItem(i,0,item);
 
-        item = _UsrInfoOnlineModel->item(i,1);
+        item = _SessionInfoModel->item(i,1);
         if(item){
-            item->setText( QString(list.at(i)->usrID()) );
+            item->setText( temp[temp.keys()[i]]->property("usrName").toString() );
         }
         else{
-            item = new QStandardItem( QString(list.at(i)->usrID()) );
+            item = new QStandardItem( temp[temp.keys()[i]]->property("usrName").toString() );
+            _SessionInfoModel->setItem(i,1,item);
         }
-        _UsrInfoOnlineModel->setItem(i,1,item);
 
-
-        item = _UsrInfoOnlineModel->item(i,2);
+        item = _SessionInfoModel->item(i,2);
         if(item){
-            item->setText( list.at(i)->onlineUsrInfo() );
+            item->setText( temp[temp.keys()[i]]->property("usrLevel").toString() );
         }
         else{
-            item = new QStandardItem( list.at(i)->onlineUsrInfo() );
+            item = new QStandardItem( temp[temp.keys()[i]]->property("usrLevel").toString() );
+            _SessionInfoModel->setItem(i,2,item);
         }
-        _UsrInfoOnlineModel->setItem(i,2,item);
 
-        item = _UsrInfoOnlineModel->item(i,3);
+        item = _SessionInfoModel->item(i,3);
         if(item){
-            item->setText( list.at(i)->activeTime().toString() );
+            item->setText( temp[temp.keys()[i]]->property("identifier").toString() );
         }
         else{
-            item = new QStandardItem( list.at(i)->activeTime().toString()  );
+            item = new QStandardItem( temp[temp.keys()[i]]->property("identifier").toString() );
+            _SessionInfoModel->setItem(i,3,item);
         }
-        _UsrInfoOnlineModel->setItem(i,3,item);
 
-        item = _UsrInfoOnlineModel->item(i,4);
+        item = _SessionInfoModel->item(i,4);
         if(item){
-            item->setText( list.at(i)->expireTime().toString() );
+            item->setText( temp[temp.keys()[i]]->isActive()?tr("是"):tr("否") );
         }
         else{
-            item = new QStandardItem( list.at(i)->expireTime().toString()  );
+            item = new QStandardItem( temp[temp.keys()[i]]->isActive()?tr("是"):tr("否") );
+            _SessionInfoModel->setItem(i,4,item);
         }
-        _UsrInfoOnlineModel->setItem(i,4,item);
 
-
-        item = _UsrInfoOnlineModel->item(i,5);
+        item = _SessionInfoModel->item(i,5);
         if(item){
-            item->setText( list.at(i)->loginTime().toString() );
+            item->setText( temp[temp.keys()[i]]->activeTime().toString() );
         }
         else{
-            item = new QStandardItem( list.at(i)->loginTime().toString()  );
+            item = new QStandardItem( temp[temp.keys()[i]]->activeTime().toString()  );
+            _SessionInfoModel->setItem(i,5,item);
         }
-        _UsrInfoOnlineModel->setItem(i,5,item);
+
+        item = _SessionInfoModel->item(i,6);
+        if(item){
+            item->setText( temp[temp.keys()[i]]->expireTime().toString() );
+        }
+        else{
+            item = new QStandardItem( temp[temp.keys()[i]]->expireTime().toString()  );
+            _SessionInfoModel->setItem(i,6,item);
+        }
+
+
+        item = _SessionInfoModel->item(i,7);
+        if(item){
+            item->setText( temp[temp.keys()[i]]->loginTime().toString() );
+        }
+        else{
+            item = new QStandardItem( temp[temp.keys()[i]]->loginTime().toString()  );
+            _SessionInfoModel->setItem(i,7,item);
+        }
 
     }
-    _UsrInfoOnlineModel->removeRows(i, _UsrInfoOnlineModel->rowCount() - i);
+    _SessionInfoModel->removeRows(i, _SessionInfoModel->rowCount() - i);
 }
 
 void MainWindow::refreshUsrInfo(){
-    QList<UsrInfo*> list;
-    QList<QObject* > temp = _manager->allUsrInfo();
-    foreach(QObject* t, temp){
-        list << static_cast<UsrInfo*>(t);
-    }
+    QList<UsrInfo*> &list(_manager->allUsrInfo() );
+
     QStandardItem* item;
     int i;
-
-//    qDebug()<<"MainWindow::refreshData"<<_UsrInfoModel->rowCount()<<list.size();
     for(i=0 ; i< list.size(); i++){
         item = _UsrInfoModel->item(i,0);
         if(item){
-            item->setText( list.at(i)->name() );
+            item->setText( list[i]->name() );
         }
         else{
-            item = new QStandardItem( list.at(i)->name() );
+            item = new QStandardItem( list[i]->name() );
         }
         _UsrInfoModel->setItem(i,0,item);
 
         item = _UsrInfoModel->item(i,1);
         if(item){
-            item->setText( QString::number(list.at(i)->level()) );
+            item->setText( QString::number(list[i]->level()) );
         }
         else{
-            item = new QStandardItem( QString::number(list.at(i)->level()) );
+            item = new QStandardItem( QString::number(list[i]->level()) );
         }
         _UsrInfoModel->setItem(i,1,item);
 
         item = _UsrInfoModel->item(i,2);
         if(item){
-            item->setText( list.at(i)->usrDescript() );
+            item->setText( list[i]->usrDescript() );
         }
         else{
-            item = new QStandardItem( list.at(i)->usrDescript() );
+            item = new QStandardItem( list[i]->usrDescript() );
         }
         _UsrInfoModel->setItem(i,2,item);
 
@@ -174,7 +184,7 @@ void MainWindow::refreshUsrInfo(){
 void MainWindow::on_pbRefresh_clicked()
 {
     refreshUsrInfo();
-    refreshUsrInfoOnline();
+    refreshSessionInfo();
 }
 
 void MainWindow::on_pbDel_clicked()

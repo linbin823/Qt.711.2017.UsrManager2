@@ -1,4 +1,5 @@
 #include "modifyusrinfo.h"
+#include "usrinfo.h"
 #include "ui_modifyusrinfo.h"
 
 ModifyUsrInfo::ModifyUsrInfo(QWidget *parent) :

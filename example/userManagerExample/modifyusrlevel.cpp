@@ -1,5 +1,6 @@
 #include "modifyusrlevel.h"
 #include "ui_modifyusrlevel.h"
+#include "usrinfo.h"
 #include <QMessageBox>
 
 ModifyUsrLevel::ModifyUsrLevel(QWidget *parent) :
@@ -27,7 +28,7 @@ void ModifyUsrLevel::on_pbModifyLevel_clicked()
 {
     if(_info!= nullptr){
         bool ret = _info->setLevel( ui->sbUsrNewLevel->value(),
-                                    _info->genCryptoString( ui->lePWD->text() ));
+                                    UsrInfo::genCryptoString( _info->name() ,ui->lePWD->text() ));
 
         QString msgText;
         QMessageBox msgBox;

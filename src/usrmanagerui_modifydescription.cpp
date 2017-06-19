@@ -29,7 +29,8 @@ void UsrManagerUI_modifydescription::setUsrInfo( UsrInfo* info ){
 void UsrManagerUI_modifydescription::on_pbModifyLevel_clicked()
 {
     if(_info!= nullptr){
-        _info->setUsrDescript( ui->teUsrDescript->toPlainText() );
+        _info->setUsrDescript( ui->teUsrDescript->toPlainText(),
+                               UsrInfo::genCryptoString( _info->name(), ui->lePwd->text()) );
         QString msgText;
         QMessageBox msgBox;
         msgText = "change description successful!";

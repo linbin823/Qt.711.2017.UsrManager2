@@ -24,7 +24,7 @@ private slots:
 
     void on_pbLogOut_clicked();
 
-    void refreshUsrInfoOnline();
+    void refreshSessionInfo();
 
     void refreshUsrInfo();
 
@@ -47,7 +47,7 @@ private:
     ModifyUsrInfo* _modifyInfo;
 
     QStandardItemModel* _UsrInfoModel;
-    QStandardItemModel* _UsrInfoOnlineModel;
+    QStandardItemModel* _SessionInfoModel;
 
 };
 

@@ -1,5 +1,6 @@
 #include "modifyusrpwd.h"
 #include "ui_modifyusrpwd.h"
+#include "usrinfo.h"
 #include <QMessageBox>
 
 ModifyUsrPWD::ModifyUsrPWD(QWidget *parent) :
@@ -36,8 +37,8 @@ void ModifyUsrPWD::on_pbModifyLevel_clicked()
         }
 
 
-        bool ret = _info->setPassWord( _info->genCryptoString( ui->leOldPWD->text() ),
-                                       _info->genCryptoString( ui->leNewPWD->text() ) );
+        bool ret = _info->setPassWord( UsrInfo::genCryptoString( _info->name(), ui->leOldPWD->text() ),
+                                       UsrInfo::genCryptoString( _info->name(), ui->leNewPWD->text() ) );
         QString msgText;
         QMessageBox msgBox;
         if(ret) msgText = "password set successful!";

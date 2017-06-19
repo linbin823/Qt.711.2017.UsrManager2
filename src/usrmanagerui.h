@@ -20,29 +20,23 @@ class UsrManagerUI : public QWidget
     Q_OBJECT
 
 public:
-    explicit UsrManagerUI(UsrManager* mgr,
-                          QWidget *parent = 0);
+    explicit UsrManagerUI(QWidget *parent = 0);
     ~UsrManagerUI();
 
 private:
     Ui::UsrManagerUI *ui;
-    UsrManager* _mgr;
-
-
     UsrManager* _manager;
     UsrManagerUI_add* _usrAdd;
     UsrManagerUI_events* _usrEvents;
     usrManagerUI_modify* _usrModify;
 
     QStandardItemModel* _UsrInfoModel;
-    QStandardItemModel* _UsrInfoOnlineModel;
+    QStandardItemModel* _SessionInfoModel;
 
 private slots:
-    void refreshUsrInfoOnline();
+    void refreshSessionInfo();
     void refreshUsrInfo();
     void on_pbAdd_clicked();
-    void on_tvUsrInfoOnlineList_clicked(const QModelIndex &index);
-    void on_tvUsrInfoList_clicked(const QModelIndex &index);
     void on_pbModify_clicked();
     void on_pbEvent_clicked();
     void on_pbCancel_clicked();
@@ -51,6 +45,8 @@ private slots:
     void on_pbLogoutAll_clicked();
     void on_pbTimeOverDelaySet_clicked();
     void _refreshTimeOutAftLogIn(long newValue);
+    void on_pbRefreshSessionInfoList_clicked();
+    void on_pbRefreshUsrInfoList_clicked();
 };
 
 #endif // USRMANAGERUI_H

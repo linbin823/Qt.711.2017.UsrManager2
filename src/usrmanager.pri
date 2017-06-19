@@ -6,7 +6,6 @@ CONFIG += c++11
 SOURCES +=\
     $$PWD/usrinfo.cpp \
     $$PWD/usrmanager.cpp \
-    $$PWD/usrinfoonline.cpp \
     $$PWD/usrmanagerui.cpp \
     $$PWD/usrmanagerui_add.cpp \
     $$PWD/usrmanagerui_modify.cpp \
@@ -14,12 +13,12 @@ SOURCES +=\
     $$PWD/usrmanagerui_modifypwd.cpp \
     $$PWD/usrmanagerui_modifydescription.cpp \
     $$PWD/usrmanagerui_modifylevel.cpp \
-    $$PWD/usrmanagerui_events.cpp
+    $$PWD/usrmanagerui_events.cpp \
+    $$PWD/sessioninfo.cpp
 
 HEADERS  +=\
     $$PWD/usrinfo.h \
     $$PWD/usrmanager.h \
-    $$PWD/usrinfoonline.h \
     $$PWD/usrmanagerui.h \
     $$PWD/usrmanagerui_add.h \
     $$PWD/usrmanagerui_modify.h \
@@ -27,7 +26,8 @@ HEADERS  +=\
     $$PWD/usrmanagerui_modifypwd.h \
     $$PWD/usrmanagerui_modifydescription.h \
     $$PWD/usrmanagerui_modifylevel.h \
-    $$PWD/usrmanagerui_events.h
+    $$PWD/usrmanagerui_events.h \
+    $$PWD/sessioninfo.h
 
 INCLUDEPATH += $$PWD\
 

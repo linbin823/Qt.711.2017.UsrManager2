@@ -1,5 +1,6 @@
 #include "modifyusrname.h"
 #include "ui_modifyusrname.h"
+#include "usrinfo.h"
 #include <QMessageBox>
 
 ModifyUsrName::ModifyUsrName(QWidget *parent) :

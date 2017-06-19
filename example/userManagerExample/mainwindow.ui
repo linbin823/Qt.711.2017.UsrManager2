@@ -306,7 +306,7 @@
       </layout>
      </item>
      <item row="0" column="0" rowspan="4" colspan="2">
-      <widget class="QTableView" name="UsrInfoOnlineList"/>
+      <widget class="QTableView" name="SessionInfoList"/>
      </item>
      <item row="4" column="0" rowspan="7" colspan="2">
       <widget class="QTableView" name="UsrInfoList"/>
@@ -363,7 +363,7 @@
   <tabstop>leUsrID_2</tabstop>
   <tabstop>pbCheck</tabstop>
   <tabstop>pbRefresh</tabstop>
-  <tabstop>UsrInfoOnlineList</tabstop>
+  <tabstop>SessionInfoList</tabstop>
   <tabstop>UsrInfoList</tabstop>
  </tabstops>
  <resources/>

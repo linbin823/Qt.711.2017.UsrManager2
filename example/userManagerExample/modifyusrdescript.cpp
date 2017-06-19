@@ -1,5 +1,6 @@
 #include "modifyusrdescript.h"
 #include "ui_modifyusrdescript.h"
+#include "usrinfo.h"
 #include <QMessageBox>
 
 ModifyUsrDescript::ModifyUsrDescript(QWidget *parent) :
@@ -26,7 +27,8 @@ void ModifyUsrDescript::setUsrInfo( UsrInfo* info ){
 void ModifyUsrDescript::on_pbModifyLevel_clicked()
 {
     if(_info!= nullptr){
-        _info->setUsrDescript( ui->teUsrDescript->toPlainText() );
+        _info->setUsrDescript( ui->teUsrDescript->toPlainText(),
+                               UsrInfo::genCryptoString( _info->name(), ui->lePwd->text()));
         QString msgText;
         QMessageBox msgBox;
         msgText = "change description successful!";

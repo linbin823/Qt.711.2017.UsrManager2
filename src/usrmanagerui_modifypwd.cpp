@@ -40,8 +40,8 @@ void usrManagerUI_modifyPwd::on_pbModifyLevel_clicked()
         }
 
 
-        ret = _info->setPassWord( _info->genCryptoString( ui->leOldPWD->text() ),
-                                       _info->genCryptoString( ui->leNewPWD->text() ) );
+        ret = _info->setPassWord( UsrInfo::genCryptoString( _info->name(), ui->leOldPWD->text() ),
+                                       UsrInfo::genCryptoString( _info->name(), ui->leNewPWD->text() ) );
     }
     QString msgText;
     QMessageBox msgBox;
