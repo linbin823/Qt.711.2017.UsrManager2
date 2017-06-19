@@ -40,13 +40,13 @@ public slots:
      * 本模块不负责定义每个等级所对应的权限，仅提供一个等级数字。
      * 返回值为0说明该sessionID没有登录。
      */
-    int checkLogInLevel( const QByteArray& usrID );
+    int checkLogInLevel( const QByteArray& sessionID );
 
     /*!
      * 检查是否登录。
      * 输入sessionID，若sessionID已登录，返回true，否则返回false
      */
-    bool isLogIn( const QByteArray& usrID );
+    bool isLogIn( const QByteArray& sessionID );
 
     /*!
      * 查询会话信息
@@ -55,7 +55,7 @@ public slots:
      * 若找不到session时，则返回nullptr！
      * 另一方面，失效的session不会被删除，此方法可以查询到运行后所有的session。
      */
-    QObject* sessionInfo(const QByteArray &usrID )const;
+    QObject* sessionInfo(const QByteArray &sessionID )const;
 
     /*!
      * 获取用户信息
@@ -68,7 +68,7 @@ public slots:
      * 获取用户信息（重载）
      * 某个登录的sessionID。若找不到用户信息，或sessionID未登录，则返回nullptr！
      */
-    QObject* usrInfo(const QByteArray &usrID )const;
+    QObject* usrInfo(const QByteArray &sessionID )const;
 
     /*!
      * 获取单次登录的有效期（秒）
@@ -95,7 +95,7 @@ public slots:
      * 登出
      * 登出某个登录的sessionID。注意：仅修改会话的失效时间和状态，并不会删除记录。
      */
-    void logOut( QByteArray usrID );
+    void logOut( QByteArray sessionID );
 
     /*!
      * 全部登出

@@ -30,36 +30,36 @@ UsrManager::~UsrManager(){
     }
 }
 
-int UsrManager::checkLogInLevel(const QByteArray &usrID ){
-    if( _sessionInfoList.contains(usrID) ){
-        SessionInfo* t = _sessionInfoList[usrID];
+int UsrManager::checkLogInLevel(const QByteArray &sessionID ){
+    if( _sessionInfoList.contains(sessionID) ){
+        SessionInfo* t = _sessionInfoList[sessionID];
         if(t->isActive()){
             t->setActiveTime( _secsTimeOutAftLogIn );
             int level = t->_usrInfo->level();
-            emit msgEventString( tr("在线查询结果：用户“%1”已登录，等级为%2。").arg( QString(usrID) ).arg( QString::number(level) ));
+            emit msgEventString( tr("在线查询结果：用户“%1”已登录，等级为%2。").arg( QString(sessionID) ).arg( QString::number(level) ));
             return level;
         }
     }
-    emit msgEventString( tr("在线查询结果：用户“%1”未登录。").arg( QString(usrID) ) );
+    emit msgEventString( tr("在线查询结果：用户“%1”未登录。").arg( QString(sessionID) ) );
     return 0;
 }
 
-bool UsrManager::isLogIn(const QByteArray &usrID ){
-    if( _sessionInfoList.contains(usrID) ){
-        SessionInfo* t = _sessionInfoList[usrID];
+bool UsrManager::isLogIn(const QByteArray &sessionID ){
+    if( _sessionInfoList.contains(sessionID) ){
+        SessionInfo* t = _sessionInfoList[sessionID];
         if(t->isActive()){
             t->setActiveTime( _secsTimeOutAftLogIn );
-            emit msgEventString( tr("在线查询结果：用户“%1”已登录。").arg( QString(usrID) ) );
+            emit msgEventString( tr("在线查询结果：用户“%1”已登录。").arg( QString(sessionID) ) );
             return true;
         }
     }
-    emit msgEventString( tr("在线查询结果：用户“%1”未登录。").arg( QString(usrID) ) );
+    emit msgEventString( tr("在线查询结果：用户“%1”未登录。").arg( QString(sessionID) ) );
     return false;
 }
 
-QObject* UsrManager::sessionInfo(const QByteArray &usrID )const{
-    if( _sessionInfoList.contains(usrID) ){
-        SessionInfo* t = _sessionInfoList[usrID];
+QObject* UsrManager::sessionInfo(const QByteArray &sessionID )const{
+    if( _sessionInfoList.contains(sessionID) ){
+        SessionInfo* t = _sessionInfoList[sessionID];
         QQmlEngine::setObjectOwnership(t,QQmlEngine::CppOwnership);
         return t;
     }
@@ -77,7 +77,7 @@ QObject* UsrManager::usrInfo( const QString& name )const{
     return nullptr;
 }
 
-QObject* UsrManager::usrInfo(const QByteArray &usrID )const{
+QObject* UsrManager::usrInfo(const QByteArray &sessionID )const{
     if( _sessionInfoList.contains(usrID) ){
         SessionInfo* t = _sessionInfoList[usrID];
         UsrInfo* u = t->_usrInfo;
@@ -148,17 +148,17 @@ QByteArray& UsrManager::logIn( const QString& usrName, const QByteArray& usrPwd,
     return sessionID;
 }
 
-void UsrManager::logOut( QByteArray usrID ){
-    if( _sessionInfoList.contains(usrID) ){
-        SessionInfo* t = _sessionInfoList[usrID];
+void UsrManager::logOut(QByteArray sessionID ){
+    if( _sessionInfoList.contains(sessionID) ){
+        SessionInfo* t = _sessionInfoList[sessionID];
         if(t->isActive()){
             t->setExpireTime( QDateTime::currentDateTime());
-            emit msgEventString( tr("在线登出：成功，登出'%1'。").arg( QString(usrID) ) );
+            emit msgEventString( tr("在线登出：成功，登出'%1'。").arg( QString(sessionID) ) );
             emit msgSessionInfoListChanged();
         }
         return;
     }
-    emit msgEventString( tr("在线登出：失败，找不到'%1'。").arg( QString(usrID) ) );
+    emit msgEventString( tr("在线登出：失败，找不到'%1'。").arg( QString(sessionID) ) );
 }
 
 void UsrManager::logOutAll(void){
