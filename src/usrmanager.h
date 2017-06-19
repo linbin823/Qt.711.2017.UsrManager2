@@ -32,6 +32,13 @@ public:
     static UsrManager* Instance();
     ~UsrManager();
 
+    SessionInfo* operator [](const QByteArray& id){
+        if( _sessionInfoList.contains(id)){
+            return _sessionInfoList[id];
+        }
+        return nullptr;
+    }
+
 public slots:
 
     /*!
@@ -39,6 +46,7 @@ public slots:
      * 输入sessionID，返回登录的等级。登录的等级是一个0或正整数。数字越大等级越高。
      * 本模块不负责定义每个等级所对应的权限，仅提供一个等级数字。
      * 返回值为0说明该sessionID没有登录。
+     * 不更新失效时间，不更新最后活动时间
      */
     int checkLogInLevel( const QByteArray& sessionID );
 
@@ -54,6 +62,7 @@ public slots:
      * 该对象由UsrManager管理，不允私自许删除！
      * 若找不到session时，则返回nullptr！
      * 另一方面，失效的session不会被删除，此方法可以查询到运行后所有的session。
+     * 不更新失效时间，不更新最后活动时间
      */
     QObject* sessionInfo(const QByteArray &sessionID )const;
 

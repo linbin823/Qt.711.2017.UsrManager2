@@ -34,7 +34,6 @@ int UsrManager::checkLogInLevel(const QByteArray &sessionID ){
     if( _sessionInfoList.contains(sessionID) ){
         SessionInfo* t = _sessionInfoList[sessionID];
         if(t->isActive()){
-            t->setActiveTime( _secsTimeOutAftLogIn );
             int level = t->_usrInfo->level();
             emit msgEventString( tr("在线查询结果：用户“%1”已登录，等级为%2。").arg( QString(sessionID) ).arg( QString::number(level) ));
             return level;
@@ -48,7 +47,6 @@ bool UsrManager::isLogIn(const QByteArray &sessionID ){
     if( _sessionInfoList.contains(sessionID) ){
         SessionInfo* t = _sessionInfoList[sessionID];
         if(t->isActive()){
-            t->setActiveTime( _secsTimeOutAftLogIn );
             emit msgEventString( tr("在线查询结果：用户“%1”已登录。").arg( QString(sessionID) ) );
             return true;
         }
