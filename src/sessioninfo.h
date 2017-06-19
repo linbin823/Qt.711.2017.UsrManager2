@@ -56,7 +56,7 @@ public slots:
      * 获取一个属性的值
      * SessionInfo初始的时候必有一个属性"identifier"。
      * 同时UsrInfo的主要属性也可以使用该函数查询。
-     * "identifier","usrName","usrLevel","usrDescription"是保留的关键字。
+     * "usrName","usrLevel","usrDescription"是保留的关键字。
      * 找不到返回QVariant()
      */
     QVariant& property(const QString& key);

@@ -244,7 +244,7 @@
       </layout>
      </item>
      <item row="4" column="2">
-      <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1,1,1" columnminimumwidth="0,0,0,0">
+      <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,0,0,0">
        <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="lbLogin">
          <property name="text">
@@ -267,28 +267,18 @@
         </widget>
        </item>
        <item row="4" column="0" colspan="2">
-        <widget class="QLabel" name="lbOnlineUsrInfo">
-         <property name="text">
-          <string>在线识别信息</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
         <widget class="QLabel" name="lbUsrID">
          <property name="text">
           <string>用户ID</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="2" colspan="2">
+       <item row="4" column="2" colspan="2">
         <widget class="QLabel" name="lbUsrID_res">
          <property name="text">
           <string>UsrID</string>
          </property>
         </widget>
-       </item>
-       <item row="4" column="2" colspan="2">
-        <widget class="QLineEdit" name="leOnlineUsrInfo"/>
        </item>
        <item row="2" column="2" colspan="2">
         <widget class="QLineEdit" name="leUsrPswd"/>
@@ -357,7 +347,6 @@
   <tabstop>pbLogIn</tabstop>
   <tabstop>leUsrName</tabstop>
   <tabstop>leUsrPswd</tabstop>
-  <tabstop>leOnlineUsrInfo</tabstop>
   <tabstop>leUsrID</tabstop>
   <tabstop>pbLogOut</tabstop>
   <tabstop>leUsrID_2</tabstop>

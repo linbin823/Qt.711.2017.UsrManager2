@@ -97,32 +97,9 @@ void UsrManager::setTimeOutAftLogIn(long newValue){
     }
 }
 
-QByteArray& UsrManager::logIn( const QString& usrName, const QByteArray& usrPwd, const QString& usrIdentifier ){
+QByteArray& UsrManager::logIn(const QString& usrName, const QByteArray& usrPwd){
     static QByteArray sessionID = QByteArray();
     sessionID = QByteArray();
-    UsrInfo* uInfo;
-    SessionInfo* sInfo;
-    QHash<QByteArray,SessionInfo*>::iterator it;
-    QString onlineUsrIdentifier;
-    for(it=_sessionInfoList.begin() ; it!=_sessionInfoList.end() ; ++it){
-        sInfo = it.value();
-        uInfo = sInfo->_usrInfo;
-        if( uInfo->name() == usrName && uInfo->passWordCheck( usrPwd )){
-            onlineUsrIdentifier = sInfo->property("identifier").toString();
-            if( usrIdentifier == onlineUsrIdentifier ){
-                //有登录信息,重复登录
-                sInfo->setLoginTime();
-                sInfo->setActiveTime( _secsTimeOutAftLogIn );
-                sessionID = it.key();
-                emit msgSessionInfoListChanged();
-                emit msgEventString( tr("在线登录：重复登录\n\t用户名：%1。\n\t用户ID：%2。\n\t会话识别信息：%3。")
-                                     .arg( usrName)
-                                     .arg( QString(sessionID) )
-                                     .arg( usrIdentifier) );
-                return sessionID;
-            }
-        }
-    }
     foreach (UsrInfo* t, _usrInfoList) {
         if( t->name() == usrName && t->passWordCheck( usrPwd )){
             //新登录
@@ -131,13 +108,11 @@ QByteArray& UsrManager::logIn( const QString& usrName, const QByteArray& usrPwd,
             QQmlEngine::setObjectOwnership(newOne,QQmlEngine::CppOwnership);
             newOne->setLoginTime();
             newOne->setActiveTime( _secsTimeOutAftLogIn );
-            newOne->setProperty( "identifier", QVariant::fromValue(usrIdentifier) );
             _sessionInfoList.insert( sessionID, newOne);
             emit msgSessionInfoListChanged();
-            emit msgEventString( tr("在线登录：新登录\n\t用户名：%1。\n\tSessionID：%2。\n\t会话识别信息：%3。")
+            emit msgEventString( tr("在线登录：新登录\n\t用户名：%1。\n\tSessionID：%2。")
                                  .arg( usrName)
-                                 .arg( QString(sessionID))
-                                 .arg( usrIdentifier) );
+                                 .arg( QString(sessionID))  );
             return sessionID;
         }
     }

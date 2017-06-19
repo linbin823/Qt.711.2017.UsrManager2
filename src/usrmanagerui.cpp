@@ -22,7 +22,7 @@ UsrManagerUI::UsrManagerUI(QWidget *parent) :
 
     _SessionInfoModel = new QStandardItemModel(this);
     title.clear();
-    title<<tr("会话ID")<<tr("用户名")<<tr("用户等级")<<tr("会话识别信息")<<tr("是否有效")<<tr("最后活动时间")<<tr("过期时间")<<tr("登录时间");
+    title<<tr("会话ID")<<tr("用户名")<<tr("用户等级")<<tr("是否有效")<<tr("最后活动时间")<<tr("过期时间")<<tr("登录时间");
     _SessionInfoModel->setHorizontalHeaderLabels( title );
 
     connect(_manager,&UsrManager::msgUsrInfoListChanged,
@@ -88,48 +88,39 @@ void UsrManagerUI::refreshSessionInfo(){
 
         item = _SessionInfoModel->item(i,3);
         if(item){
-            item->setText( sInfos[i]->property("identifier").toString() );
+            item->setText( sInfos[i]->isActive()?tr("是"):tr("否") );
         }
         else{
-            item = new QStandardItem( sInfos[i]->property("identifier").toString() );
+            item = new QStandardItem( sInfos[i]->isActive()?tr("是"):tr("否") );
             _SessionInfoModel->setItem(i,3,item);
         }
 
         item = _SessionInfoModel->item(i,4);
         if(item){
-            item->setText( sInfos[i]->isActive()?tr("是"):tr("否") );
+            item->setText( sInfos[i]->activeTime().toString() );
         }
         else{
-            item = new QStandardItem( sInfos[i]->isActive()?tr("是"):tr("否") );
+            item = new QStandardItem( sInfos[i]->activeTime().toString()  );
             _SessionInfoModel->setItem(i,4,item);
         }
 
         item = _SessionInfoModel->item(i,5);
         if(item){
-            item->setText( sInfos[i]->activeTime().toString() );
-        }
-        else{
-            item = new QStandardItem( sInfos[i]->activeTime().toString()  );
-            _SessionInfoModel->setItem(i,5,item);
-        }
-
-        item = _SessionInfoModel->item(i,6);
-        if(item){
             item->setText( sInfos[i]->expireTime().toString() );
         }
         else{
             item = new QStandardItem( sInfos[i]->expireTime().toString()  );
-            _SessionInfoModel->setItem(i,6,item);
+            _SessionInfoModel->setItem(i,5,item);
         }
 
 
-        item = _SessionInfoModel->item(i,7);
+        item = _SessionInfoModel->item(i,6);
         if(item){
             item->setText( sInfos[i]->loginTime().toString() );
         }
         else{
             item = new QStandardItem( sInfos[i]->loginTime().toString()  );
-            _SessionInfoModel->setItem(i,7,item);
+            _SessionInfoModel->setItem(i,6,item);
         }
 
     }

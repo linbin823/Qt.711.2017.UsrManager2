@@ -96,11 +96,9 @@ public slots:
      * 输入登录的用户名、密码和在线识别信息，返回登录的sessionID。产生几种结果：
      * 1、找不到用户名和密码，返回的sessionID等于QByteArray()。
      * 2、用户名或密码错误，返回的sessionID等于QByteArray()。等同于情况1。
-     * 3、用户名密码正确，与之前的在线登录的在线识别信息完全一致。属于重复登录。返回已存在的登录的sessionID。更新登录时间、活动时间和失效时间。
-     * 4、用户名密码正确，识别信息独一无二。属于新登录。记录新的登录信息，并返回一个新生成的sessionID。更新登录时间、活动时间和失效时间。
-     * 5、usrIdentifier推荐是浏览器或某些识别信息。登录成功后自动保存在sessionInfo::property[identifier]中。
+     * 3、用户名密码正确。新登录。记录新的登录信息，并返回一个新生成的sessionID。更新登录时间、活动时间和失效时间。
      */
-    QByteArray& logIn(const QString& usrName, const QByteArray &usrPwd, const QString& usrIdentifier );
+    QByteArray& logIn(const QString& usrName, const QByteArray &usrPwd);
 
     /*!
      * 登出

@@ -33,14 +33,14 @@ QVariant& SessionInfo::property(const QString& key){
     return emptyValue;
 }
 
-// "identifier","usrName","usrLevel","usrDescription"是保留的关键字。
+// "usrName","usrLevel","usrDescription"是保留的关键字。
 void SessionInfo::unsetProperty(const QString& key){
     if(key=="idemtifier" || key=="usrName" || key=="usrLevel" || key=="usrDescription") return;
     int ret = _properties.remove(key);
     if(ret>0) emit propertiesChanged();
 }
 
-// "identifier","usrName","usrLevel","usrDescription"是保留的关键字。
+// "usrName","usrLevel","usrDescription"是保留的关键字。
 void SessionInfo::setProperty(const QString& key, const QVariant &value){
     if(key=="idemtifier" || key=="usrName" || key=="usrLevel" || key=="usrDescription") return;
     _properties.insert(key,value);
