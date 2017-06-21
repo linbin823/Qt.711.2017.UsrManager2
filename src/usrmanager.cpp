@@ -106,8 +106,9 @@ QByteArray& UsrManager::logIn(const QString& usrName, const QByteArray& usrPwd){
             sessionID = _sessionIDGen();
             SessionInfo* newOne= new SessionInfo(t, this);
             QQmlEngine::setObjectOwnership(newOne,QQmlEngine::CppOwnership);
-            newOne->setLoginTime();
-            newOne->setActiveTime( _secsTimeOutAftLogIn );
+            newOne->setProperty("loginTime",QVariant(QDateTime::currentDateTime()));
+            newOne->setProperty("activeTime",QVariant(QDateTime::currentDateTime()));
+            newOne->setExpireTime( QDateTime::currentDateTime().addSecs(_secsTimeOutAftLogIn) );
             _sessionInfoList.insert( sessionID, newOne);
             emit msgSessionInfoListChanged();
             emit msgEventString( tr("在线登录：新登录\n\t用户名：%1。\n\tSessionID：%2。")

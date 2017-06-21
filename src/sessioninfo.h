@@ -20,8 +20,6 @@ class SessionInfo :  public QObject , public iLoadSave
 
     Q_PROPERTY(QVariantMap  properties     READ properties     NOTIFY propertiesChanged)
     Q_PROPERTY(QDateTime    expireTime     READ expireTime     WRITE  setExpireTime      NOTIFY expireTimeChanged)
-    Q_PROPERTY(QDateTime    loginTime      READ loginTime      NOTIFY loginTimeChanged)
-    Q_PROPERTY(QDateTime    activeTime     READ activeTime     NOTIFY activeTimeChanged)
 
     friend class UsrManager;
 
@@ -82,26 +80,6 @@ public slots:
     void setExpireTime(const QDateTime& time);
 
     /*!
-     *  获取登录时间。
-     */
-    QDateTime& loginTime(void);
-
-    /*!
-     *  设置当前时间为登录时间。
-     */
-    void setLoginTime(void);
-
-    /*!
-     *  获取最后活动时间。
-     */
-    QDateTime& activeTime(void);
-
-    /*!
-     *  设置当前时间为最后活动时间。然后把失效时间往后推sec秒。
-     */
-    void setActiveTime(long sec=0 );
-
-    /*!
      *  保存 实现iLoadSave
      */
     void save(iLoadSaveProcessor* processor);
@@ -114,7 +92,7 @@ public slots:
 private:
     QVariantMap _properties;
     UsrInfo*    _usrInfo;
-    QDateTime   _expireTime,_loginTime,_activeTime;
+    QDateTime   _expireTime;
 
 private slots:
     //process the usrInfo properties changed event
@@ -123,8 +101,6 @@ private slots:
 signals:
     void propertiesChanged();
     void expireTimeChanged();
-    void loginTimeChanged();
-    void activeTimeChanged();
 };
 
 #endif // SESSIONINFO_H

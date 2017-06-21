@@ -97,10 +97,10 @@ void UsrManagerUI::refreshSessionInfo(){
 
         item = _SessionInfoModel->item(i,4);
         if(item){
-            item->setText( sInfos[i]->activeTime().toString() );
+            item->setText( sInfos[i]->property("activeTime").toDateTime().toString() );
         }
         else{
-            item = new QStandardItem( sInfos[i]->activeTime().toString()  );
+            item = new QStandardItem( sInfos[i]->property("activeTime").toDateTime().toString()  );
             _SessionInfoModel->setItem(i,4,item);
         }
 
@@ -116,10 +116,10 @@ void UsrManagerUI::refreshSessionInfo(){
 
         item = _SessionInfoModel->item(i,6);
         if(item){
-            item->setText( sInfos[i]->loginTime().toString() );
+            item->setText( sInfos[i]->property("loginTime").toDateTime().toString() );
         }
         else{
-            item = new QStandardItem( sInfos[i]->loginTime().toString()  );
+            item = new QStandardItem( sInfos[i]->property("loginTime").toDateTime().toString()  );
             _SessionInfoModel->setItem(i,6,item);
         }
 

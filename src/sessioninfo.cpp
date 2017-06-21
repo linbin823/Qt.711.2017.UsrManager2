@@ -10,9 +10,7 @@
 SessionInfo::SessionInfo(UsrInfo* usrInfo, QObject *parent): QObject(parent)
 {
     _usrInfo = usrInfo;
-    _activeTime = QDateTime::currentDateTime();
     _expireTime = QDateTime::currentDateTime();
-    _loginTime  = QDateTime::currentDateTime();
     connect(_usrInfo, &UsrInfo::nameChanged,
             this,&SessionInfo::propertyChanged);
     connect(_usrInfo, &UsrInfo::levelChanged,
@@ -57,31 +55,8 @@ void SessionInfo::setExpireTime(const QDateTime& time){
     }
 }
 
-QDateTime& SessionInfo::loginTime(void){
-    return _loginTime;
-}
-void SessionInfo::setLoginTime(void){
-    _loginTime = QDateTime::currentDateTime();
-    emit loginTimeChanged();
-}
-
-QDateTime& SessionInfo::activeTime(void){
-    return _activeTime;
-}
-
-void SessionInfo::setActiveTime(long sec){
-    _activeTime = QDateTime::currentDateTime();
-    emit activeTimeChanged();
-    if(sec!=0){
-        _expireTime = _activeTime.addSecs(sec);
-        emit expireTimeChanged();
-    }
-}
-
 void SessionInfo::save(iLoadSaveProcessor* processor){
     processor->writeValue("expireTime", _expireTime);
-    processor->writeValue("loginTime", _loginTime);
-    processor->writeValue("activeTime", _activeTime);
     int num =_properties.count();
     QString key;
     QString value;
@@ -100,8 +75,6 @@ void SessionInfo::save(iLoadSaveProcessor* processor){
 
 void SessionInfo::load(iLoadSaveProcessor* processor){
     processor->readValue("expireTime", _expireTime);
-    processor->readValue("loginTime", _loginTime);
-    processor->readValue("activeTime", _activeTime);
     _properties.clear();
     int ret=0,num =0;
     QString key;
