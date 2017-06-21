@@ -46,3 +46,14 @@ FORMS += \
     $$PWD/usrmanagerui_modifydescription.ui \
     $$PWD/usrmanagerui_modifylevel.ui \
     $$PWD/usrmanagerui_events.ui
+
+
+#CONFIG += tufao1
+#following class is a wrapper in tufao1's interface
+tufao1: {
+    message("with tufao1")
+    SOURCES +=\
+        $$PWD/appsessionstore.cpp
+    HEADERS  +=\
+        $$PWD/appsessionstore.h
+}

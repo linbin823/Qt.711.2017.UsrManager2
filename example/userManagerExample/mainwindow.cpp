@@ -104,10 +104,10 @@ void MainWindow::refreshSessionInfo(){
 
         item = _SessionInfoModel->item(i,4);
         if(item){
-            item->setText( temp[temp.keys()[i]]->activeTime().toString() );
+            item->setText( temp[temp.keys()[i]]->property("activeTime").toString() );
         }
         else{
-            item = new QStandardItem( temp[temp.keys()[i]]->activeTime().toString()  );
+            item = new QStandardItem( temp[temp.keys()[i]]->property("activeTime").toString()  );
             _SessionInfoModel->setItem(i,4,item);
         }
 
@@ -123,10 +123,10 @@ void MainWindow::refreshSessionInfo(){
 
         item = _SessionInfoModel->item(i,6);
         if(item){
-            item->setText( temp[temp.keys()[i]]->loginTime().toString() );
+            item->setText( temp[temp.keys()[i]]->property("loginTime").toString() );
         }
         else{
-            item = new QStandardItem( temp[temp.keys()[i]]->loginTime().toString()  );
+            item = new QStandardItem( temp[temp.keys()[i]]->property("loginTime").toString()  );
             _SessionInfoModel->setItem(i,6,item);
         }
 
