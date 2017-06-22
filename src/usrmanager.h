@@ -174,7 +174,7 @@ public slots:
     /*!
      * 显示管理页面
      */
-    void showUI(QWidget* parent = 0);
+    void showUI(bool show=true, QWidget* parent=0);
 
 signals:
     void msgUsrInfoListChanged();

@@ -335,12 +335,16 @@ void UsrManager::_usrInfoChanged(void){
     emit msgUsrInfoListChanged();
 }
 
-void UsrManager::showUI(QWidget *parent){
+void UsrManager::showUI(bool show, QWidget *parent){
     if(_pUI == nullptr){
         _pUI = new UsrManagerUI(parent);
         _pUI->show();
     }
-    if(_pUI->isHidden()){
-        _pUI->show();
+    if(show){
+        if(_pUI->isHidden()){
+            _pUI->show();
+        }
+    }else{
+        _pUI->hide();
     }
 }

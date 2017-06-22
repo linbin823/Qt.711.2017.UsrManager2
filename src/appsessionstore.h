@@ -125,17 +125,17 @@ public:
     /*!
      * 保存功能
      */
-    void save(iLoadSaveProcessor* processor);
+    void save(iLoadSaveProcessor* processor) override;
 
     /*!
      * 读取功能
      */
-    void load(iLoadSaveProcessor* processor);
+    void load(iLoadSaveProcessor* processor) override;
 
     /*!
      * 显示管理页面
      */
-    void showUI(QWidget* parent = 0);
+    void showUI(bool show=true, QWidget* parent=0);
 
 
 private:

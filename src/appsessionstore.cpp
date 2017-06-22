@@ -181,8 +181,8 @@ void AppSessionStore::load(iLoadSaveProcessor* processor){
     _mgr->load(processor);
 }
 
-void AppSessionStore::showUI(QWidget* parent){
-    _mgr->showUI(parent);
+void AppSessionStore::showUI(bool show, QWidget* parent){
+    _mgr->showUI(show,parent);
 }
 
 void AppSessionStore::onTimeOutAftLogInChanged(long newValue){

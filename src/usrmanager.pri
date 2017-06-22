@@ -51,7 +51,7 @@ FORMS += \
 #CONFIG += tufao1
 #following class is a wrapper in tufao1's interface
 tufao1: {
-    message("with tufao1")
+    message("from UsrManager submodule: tufao1 found")
     SOURCES +=\
         $$PWD/appsessionstore.cpp
     HEADERS  +=\
