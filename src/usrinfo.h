@@ -31,7 +31,7 @@ public slots:
      * 静态类函数
      * 方便管理UI使用，使用Algorithm( Algorithm(pswd)+name )算法，从明文密码生成加密密码。
      */
-    static QByteArray genCryptoString(const QString &name, const QString &pswd ,
+    static QString genCryptoString(const QString &name, const QString &pwdWithoutCrypto ,
                                       QCryptographicHash::Algorithm alg = QCryptographicHash::Md5);
 
     /*!
@@ -49,7 +49,7 @@ public slots:
      * 修改等级，成功返回ture，否则返回false
      * 等级必须大于等于1，小于等于200。
      */
-    bool setLevel(int newLevel, const QByteArray& pwd);
+    bool setLevel(int newLevel, const QString &pwd);
 
     /*!
      * 查询用户数据
@@ -59,17 +59,17 @@ public slots:
     /*!
      * 修改用户描述，成功返回ture，否则返回false
      */
-    bool setUsrDescript(const QString& data, const QByteArray& pwd);
+    bool setUsrDescript(const QString& data, const QString& pwd);
 
     /*!
      * 检查密码，正确返回ture，否则返回false
      */
-    bool passWordCheck(const QByteArray& testPswd);
+    bool passWordCheck(const QString& testPswd);
 
     /*!
      * 修改密码，成功返回ture，否则返回false
      */
-    bool setPassWord(const QByteArray& oldPswd, const QByteArray& newPswd);
+    bool setPassWord(const QString& oldCryptoPswd, const QString& newCryptoPswd);
 
     /*!
      * 保存 实现iLoadSave
@@ -82,7 +82,7 @@ public slots:
     void load(iLoadSaveProcessor* processor);
 
 private:
-    QByteArray  _pswd;
+    QString  _pswd;
     int         _level;
     QString     _name;
     QString     _usrDescript;

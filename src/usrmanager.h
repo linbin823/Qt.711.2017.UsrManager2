@@ -98,7 +98,7 @@ public slots:
      * 2、用户名或密码错误，返回的sessionID等于QByteArray()。等同于情况1。
      * 3、用户名密码正确。新登录。记录新的登录信息，并返回一个新生成的sessionID。更新登录时间、活动时间和失效时间。
      */
-    QByteArray& logIn(const QString& usrName, const QByteArray &usrPwd);
+    QByteArray& logIn(const QString& usrName, const QString &usrPwd);
 
     /*!
      * 登出

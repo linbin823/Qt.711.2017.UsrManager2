@@ -174,11 +174,15 @@ AppSessionStore &AppSessionStore::defaultInstance()
 }
 
 void AppSessionStore::save(iLoadSaveProcessor* processor){
+    processor->moveToInstance("UsrManager","");
     _mgr->save(processor);
+    processor->moveBackToParent();
 }
 
 void AppSessionStore::load(iLoadSaveProcessor* processor){
+    processor->moveToInstance("UsrManager","");
     _mgr->load(processor);
+    processor->moveBackToParent();
 }
 
 void AppSessionStore::showUI(bool show, QWidget* parent){

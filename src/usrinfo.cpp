@@ -7,8 +7,7 @@ UsrInfo::UsrInfo(QObject *parent, QCryptographicHash::Algorithm alg):
     QObject(parent),_alg(alg)
 {
     _name = "undefined";
-    _pswd = QCryptographicHash::hash( QString("").toUtf8() , _alg);
-    _pswd = QCryptographicHash::hash( (_pswd + _name.toUtf8() ), _alg);
+    _pswd = genCryptoString( _name, QString(""), _alg);
     _level = 1;
 }
 
@@ -16,10 +15,27 @@ UsrInfo::~UsrInfo(){
 
 }
 
-QByteArray UsrInfo::genCryptoString(const QString &name, const QString &pswd, QCryptographicHash::Algorithm alg){
-    QByteArray ret = QCryptographicHash::hash( pswd.toUtf8(), alg);
-    ret = QCryptographicHash::hash( (ret + name.toUtf8() ), alg);
-    return ret;
+QString UsrInfo::genCryptoString(const QString &name,
+                                 const QString &pwdWithoutCrypto, QCryptographicHash::Algorithm alg){
+    QCryptographicHash hash(alg);
+
+    QByteArray temp = pwdWithoutCrypto.toUtf8();
+    hash.addData(temp);
+    temp = hash.result();
+
+    temp = temp.toHex() + name.toUtf8();
+
+    hash.reset();
+    hash.addData(temp);
+    temp = hash.result();
+    return temp.toHex();
+//QCryptographicHash有连续编码设计
+//前面的结果是自动添加迭代的
+//    QByteArray ba = QCryptographicHash::hash( pwdWithoutCrypto.toUtf8(), alg);
+//    ba = _cryptoHexToString(ba) + name.toUtf8();
+//    ba = QCryptographicHash::hash( ba, alg);
+//    ba = _cryptoHexToString(ba);
+//    return QString(ba);
 }
 
 QString& UsrInfo::name(){
@@ -30,7 +46,7 @@ int UsrInfo::level() const{
     return _level;
 }
 
-bool UsrInfo::passWordCheck(const QByteArray& testPswd){
+bool UsrInfo::passWordCheck(const QString &testPswd){
     if(testPswd == _pswd ){
         return true;
     }
@@ -38,7 +54,7 @@ bool UsrInfo::passWordCheck(const QByteArray& testPswd){
 }
 
 bool UsrInfo::setName(const QString& newName, const QString &pwdWithoutCrypto){
-    QByteArray temp =  genCryptoString(_name, pwdWithoutCrypto, _alg);
+    QString temp =  genCryptoString(_name, pwdWithoutCrypto, _alg);
     if(passWordCheck(temp)){
         if(_name != newName ){
             _name = newName;
@@ -50,7 +66,7 @@ bool UsrInfo::setName(const QString& newName, const QString &pwdWithoutCrypto){
     return false;
 }
 
-bool UsrInfo::setLevel(int newLevel, const QByteArray &cryptoPwd){
+bool UsrInfo::setLevel(int newLevel, const QString &cryptoPwd){
     if(passWordCheck(cryptoPwd)){
         if(_level!=newLevel && newLevel >=1 && newLevel <=200 ){
             _level = newLevel;
@@ -65,7 +81,7 @@ QString& UsrInfo::usrDescript(void){
     return _usrDescript;
 }
 
-bool UsrInfo::setUsrDescript(const QString& data , const QByteArray &cryptoPwd){
+bool UsrInfo::setUsrDescript(const QString& data , const QString &cryptoPwd){
     if(passWordCheck(cryptoPwd)){
         if(data != _usrDescript){
             _usrDescript = data;
@@ -76,10 +92,10 @@ bool UsrInfo::setUsrDescript(const QString& data , const QByteArray &cryptoPwd){
     return false;
 }
 
-bool UsrInfo::setPassWord(const QByteArray &oldPswd, const QByteArray &newPswd){
-    if(passWordCheck(oldPswd)){
-        if(newPswd != _pswd){
-            _pswd = newPswd;
+bool UsrInfo::setPassWord(const QString &oldCryptoPswd, const QString &newCryptoPswd){
+    if(passWordCheck(oldCryptoPswd)){
+        if(newCryptoPswd != _pswd){
+            _pswd = newCryptoPswd;
             emit pswdChanged();
             return true;
         }

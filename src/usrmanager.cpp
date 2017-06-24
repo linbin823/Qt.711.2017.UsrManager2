@@ -97,7 +97,7 @@ void UsrManager::setTimeOutAftLogIn(long newValue){
     }
 }
 
-QByteArray& UsrManager::logIn(const QString& usrName, const QByteArray& usrPwd){
+QByteArray& UsrManager::logIn(const QString& usrName, const QString& usrPwd){
     static QByteArray sessionID = QByteArray();
     sessionID = QByteArray();
     foreach (UsrInfo* t, _usrInfoList) {
