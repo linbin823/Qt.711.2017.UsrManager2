@@ -17,7 +17,7 @@ UsrManagerUI::UsrManagerUI(QWidget *parent) :
 
     _UsrInfoModel   = new QStandardItemModel(this);
     QStringList title;
-    title<<tr("用户名")<<tr("等级")<<tr("用户描述");
+    title<<tr("用户名")<<tr("等级")<<tr("是否独占");
     _UsrInfoModel->setHorizontalHeaderLabels( title );
 
     _SessionInfoModel = new QStandardItemModel(this);
@@ -59,70 +59,71 @@ void UsrManagerUI::refreshSessionInfo(){
     QStandardItem* item;
     int i;
     for(i=0 ; i< sIDs.size(); i++){
+        QByteArray keyName = temp.keys()[i];
+        SessionInfo* sinfo = temp[keyName];
         item = _SessionInfoModel->item(i,0);
         if(item){
-            item->setText( QString::fromUtf8(sIDs[i]) );
+            item->setText( QString::fromUtf8( keyName ) );
         }
         else{
-            item = new QStandardItem( QString::fromUtf8(sIDs[i]) );
+            item = new QStandardItem( QString::fromUtf8( keyName ) );
             _SessionInfoModel->setItem(i,0,item);
         }
 
         item = _SessionInfoModel->item(i,1);
         if(item){
-            item->setText( sInfos[i]->property("usrName").toString() );
+            item->setText( sinfo->usrInfo().name() );
         }
         else{
-            item = new QStandardItem( sInfos[i]->property("usrName").toString() );
+            item = new QStandardItem( sinfo->usrInfo().name() );
             _SessionInfoModel->setItem(i,1,item);
         }
 
         item = _SessionInfoModel->item(i,2);
         if(item){
-            item->setText( sInfos[i]->property("usrLevel").toString() );
+            item->setText( QString::number(sinfo->usrInfo().level()) );
         }
         else{
-            item = new QStandardItem( sInfos[i]->property("usrLevel").toString() );
+            item = new QStandardItem( QString::number(sinfo->usrInfo().level()) );
             _SessionInfoModel->setItem(i,2,item);
         }
 
         item = _SessionInfoModel->item(i,3);
         if(item){
-            item->setText( sInfos[i]->isActive()?tr("是"):tr("否") );
+            item->setText( sinfo->isActive()?tr("是"):tr("否") );
         }
         else{
-            item = new QStandardItem( sInfos[i]->isActive()?tr("是"):tr("否") );
+            item = new QStandardItem( sinfo->isActive()?tr("是"):tr("否") );
             _SessionInfoModel->setItem(i,3,item);
         }
 
         item = _SessionInfoModel->item(i,4);
         if(item){
-            item->setText( sInfos[i]->property("activeTime").toDateTime().toString() );
+            item->setText( sinfo->property("activeTime").toString() );
         }
         else{
-            item = new QStandardItem( sInfos[i]->property("activeTime").toDateTime().toString()  );
+            item = new QStandardItem( sinfo->property("activeTime").toString() );
             _SessionInfoModel->setItem(i,4,item);
         }
 
         item = _SessionInfoModel->item(i,5);
         if(item){
-            item->setText( sInfos[i]->expireTime().toString() );
+            item->setText( sinfo->expireTime().toString() );
         }
         else{
-            item = new QStandardItem( sInfos[i]->expireTime().toString()  );
+            item = new QStandardItem( sinfo->expireTime().toString()  );
             _SessionInfoModel->setItem(i,5,item);
         }
 
 
         item = _SessionInfoModel->item(i,6);
         if(item){
-            item->setText( sInfos[i]->property("loginTime").toDateTime().toString() );
+            item->setText( sinfo->property("loginTime").toString() );
         }
         else{
-            item = new QStandardItem( sInfos[i]->property("loginTime").toDateTime().toString()  );
+            item = new QStandardItem( sinfo->property("loginTime").toString() );
             _SessionInfoModel->setItem(i,6,item);
         }
-
     }
     _SessionInfoModel->removeRows(i, _SessionInfoModel->rowCount() - i);
     ui->tvSessionInfoList->resizeColumnsToContents();
@@ -139,31 +140,30 @@ void UsrManagerUI::refreshUsrInfo(){
     for(i=0 ; i< list.size(); i++){
         item = _UsrInfoModel->item(i,0);
         if(item){
-            item->setText( list.at(i)->name() );
+            item->setText( list[i]->name() );
         }
         else{
-            item = new QStandardItem( list.at(i)->name() );
+            item = new QStandardItem( list[i]->name() );
         }
         _UsrInfoModel->setItem(i,0,item);
 
         item = _UsrInfoModel->item(i,1);
         if(item){
-            item->setText( QString::number(list.at(i)->level()) );
+            item->setText( QString::number(list[i]->level()) );
         }
         else{
-            item = new QStandardItem( QString::number(list.at(i)->level()) );
+            item = new QStandardItem( QString::number(list[i]->level()) );
         }
         _UsrInfoModel->setItem(i,1,item);
 
         item = _UsrInfoModel->item(i,2);
         if(item){
-            item->setText( list.at(i)->usrDescript() );
+            item->setText( list[i]->property("exclusive").toBool()?tr("是"):tr("否") );
         }
         else{
-            item = new QStandardItem( list.at(i)->usrDescript() );
+            item = new QStandardItem( list[i]->property("exclusive").toBool()?tr("是"):tr("否") );
         }
         _UsrInfoModel->setItem(i,2,item);
-
     }
     _UsrInfoModel->removeRows(i, _UsrInfoModel->rowCount() - i);
     ui->tvUsrInfoList->resizeColumnsToContents();

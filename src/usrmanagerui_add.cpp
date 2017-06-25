@@ -25,10 +25,9 @@ void UsrManagerUI_add::on_pbOK_clicked()
         QString newName = ui->leNewUsrName->text();
         QString newPswd = ui->leNewUsrPswd->text();
         int newLevel = ui->cbNewUsrLevel->value();
-        QString newDescript = ui->teNewUsrDescription->toPlainText();
+        bool exclusive = ui->cbExclusive->isChecked();
 
-
-        ret =_manager->addUsr(newName, newLevel, newPswd, newDescript);
+        ret =_manager->addUsr(newName, newLevel, newPswd, exclusive);
     }
     QString msgText;
     QMessageBox msgBox;
@@ -45,6 +44,6 @@ void UsrManagerUI_add::on_pbCancel_clicked()
     ui->leNewUsrName->clear();
     ui->leNewUsrPswd->clear();
     ui->cbNewUsrLevel->setValue(1);
-    ui->teNewUsrDescription->clear();
+    ui->cbExclusive->setChecked(true);
     hide();
 }

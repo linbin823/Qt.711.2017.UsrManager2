@@ -34,7 +34,7 @@ int UsrManager::checkLogInLevel(const QByteArray &sessionID ){
     if( _sessionInfoList.contains(sessionID) ){
         SessionInfo* t = _sessionInfoList[sessionID];
         if(t->isActive()){
-            int level = t->_usrInfo->level();
+            int level = t->usrInfo().level();
             emit msgEventString( tr("在线查询结果：用户“%1”已登录，等级为%2。").arg( QString(sessionID) ).arg( QString::number(level) ));
             return level;
         }
@@ -78,7 +78,7 @@ QObject* UsrManager::usrInfo( const QString& name )const{
 QObject* UsrManager::usrInfo(const QByteArray &sessionID )const{
     if( _sessionInfoList.contains(sessionID) ){
         SessionInfo* t = _sessionInfoList[sessionID];
-        UsrInfo* u = t->_usrInfo;
+        UsrInfo* u = &t->usrInfo();
         QQmlEngine::setObjectOwnership(u,QQmlEngine::CppOwnership);
         return u;
     }
@@ -114,6 +114,17 @@ QByteArray& UsrManager::logIn(const QString& usrName, const QString& usrPwd){
             emit msgEventString( tr("在线登录：新登录\n\t用户名：%1。\n\tSessionID：%2。")
                                  .arg( usrName)
                                  .arg( QString(sessionID))  );
+            if(t->exclusive()){
+                QHash<QByteArray,SessionInfo*>::iterator it;
+                for(it = _sessionInfoList.begin(); it!= _sessionInfoList.end(); ++it){
+                    if(it.value()->usrInfo().name() == usrName){
+                        logOut( it.key() );
+                        emit msgEventString( tr("SessionID%1被挤出登录。")
+                                             .arg( QString(sessionID))  );
+                    }
+                }
+            }
+
             return sessionID;
         }
     }
@@ -143,7 +154,7 @@ void UsrManager::logOutAll(void){
 }
 
 QObject* UsrManager::addUsr(const QString& name, int level, const QString &pwdWithoutCrypto,
-                const QString& usrDescript){
+                bool exclusive){
     bool ok = checkName( name );
     if( ok ){
         //用户名不冲突
@@ -151,12 +162,8 @@ QObject* UsrManager::addUsr(const QString& name, int level, const QString &pwdWi
         newOne->setName( name , "");
         newOne->setPassWord( UsrInfo::genCryptoString( name, "" ), UsrInfo::genCryptoString( name, pwdWithoutCrypto ));
         newOne->setLevel( level , UsrInfo::genCryptoString( name, pwdWithoutCrypto ));
-        newOne->setUsrDescript( usrDescript, UsrInfo::genCryptoString( name, pwdWithoutCrypto ) );
-        connect(newOne,&UsrInfo::nameChanged,
-                this,&UsrManager::_usrInfoChanged);
-        connect(newOne,&UsrInfo::levelChanged,
-                this,&UsrManager::_usrInfoChanged);
-        connect(newOne,&UsrInfo::usrDescriptChanged,
+        newOne->setExclusive(exclusive, UsrInfo::genCryptoString( name, pwdWithoutCrypto ) );
+        connect(newOne,&UsrInfo::propertiesChanged,
                 this,&UsrManager::_usrInfoChanged);
         _usrInfoList.append(newOne);
         emit msgUsrInfoListChanged();
@@ -175,7 +182,7 @@ bool UsrManager::deleteUsr(const QString& name){
         if( t->name() == name){
             QHash<QByteArray,SessionInfo*>::iterator it;
             for(it = _sessionInfoList.begin(); it!= _sessionInfoList.end(); ++it){
-                if(it.value()->_usrInfo->name() == name){
+                if(it.value()->usrInfo().name() == name){
                     logOut( it.key() );
                 }
             }
@@ -252,11 +259,7 @@ void UsrManager::load(iLoadSaveProcessor* processor){
             uInfo->load(processor);
 
             if( checkName( uInfo->name() ) ){
-                connect(uInfo,&UsrInfo::nameChanged,
-                        this,&UsrManager::_usrInfoChanged);
-                connect(uInfo,&UsrInfo::levelChanged,
-                        this,&UsrManager::_usrInfoChanged);
-                connect(uInfo,&UsrInfo::usrDescriptChanged,
+                connect(uInfo,&UsrInfo::propertiesChanged,
                         this,&UsrManager::_usrInfoChanged);
                 _usrInfoList.append(uInfo);
                 continue;
@@ -312,7 +315,8 @@ void UsrManager::save(iLoadSaveProcessor* processor){
         QHash<QByteArray,SessionInfo*>::iterator it;
         for(it=_sessionInfoList.begin();it!=_sessionInfoList.end();++it,++i){
             processor->moveToInstance("sessionInfo", QString::number(i));
-            processor->writeValue("usrName", it.value()->_usrInfo->name() );
+            QString name = it.value()->usrInfo().name();
+            processor->writeValue("usrName", name);
             QByteArray temp = it.key();
             processor->writeValue("sessionID", temp );
             it.value()->save(processor);

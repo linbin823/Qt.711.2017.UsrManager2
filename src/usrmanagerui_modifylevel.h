@@ -22,7 +22,6 @@ public slots:
 private slots:
     void on_pbModifyLevel_clicked();
     void on_pbBack_clicked();
-
 private:
     Ui::UsrManagerUI_modifylevel *ui;
     UsrInfo* _info;

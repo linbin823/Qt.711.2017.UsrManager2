@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include "usrmanager.h"
-#include "modifyusrdescript.h"
 #include "modifyusrlevel.h"
 #include "modifyusrname.h"
 #include "modifyusrpwd.h"
@@ -32,12 +31,9 @@ private slots:
 
     void on_pbModifyName_clicked();
 
-    void on_pbModifyDescript_clicked();
-
 private:
     Ui::ModifyUsrInfo *ui;
     UsrInfo* _info;
-    ModifyUsrDescript* _descript;
     ModifyUsrLevel* _level;
     ModifyUsrName* _name;
     ModifyUsrPWD* _pwd;

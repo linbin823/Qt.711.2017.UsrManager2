@@ -17,21 +17,18 @@ SOURCES += main.cpp\
     modifyusrinfo.cpp \
     modifyusrname.cpp \
     modifyusrlevel.cpp \
-    modifyusrpwd.cpp \
-    modifyusrdescript.cpp
+    modifyusrpwd.cpp
 
 HEADERS  += mainwindow.h \
     modifyusrinfo.h \
     modifyusrname.h \
     modifyusrlevel.h \
-    modifyusrpwd.h \
-    modifyusrdescript.h
+    modifyusrpwd.h
 
 FORMS    += mainwindow.ui \
     modifyusrinfo.ui \
     modifyusrname.ui \
     modifyusrlevel.ui \
-    modifyusrpwd.ui \
-    modifyusrdescript.ui
+    modifyusrpwd.ui
 
 include($$PWD/../../src/usrmanager.pri)

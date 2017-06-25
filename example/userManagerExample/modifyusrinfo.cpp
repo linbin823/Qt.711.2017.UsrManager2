@@ -15,8 +15,6 @@ ModifyUsrInfo::ModifyUsrInfo(QWidget *parent) :
     _level->hide();
     _pwd = new ModifyUsrPWD();
     _pwd->hide();
-    _descript = new ModifyUsrDescript();
-    _descript->hide();
 }
 
 ModifyUsrInfo::~ModifyUsrInfo()
@@ -29,7 +27,6 @@ void ModifyUsrInfo::setUsrInfo( UsrInfo* info ){
         _info = info;
         ui->lbUsrName->setText( _info->name() );
         ui->lbUsrLevel->setText( QString::number(_info->level() ) );
-        ui->lbUsrDescript->setText( _info->usrDescript() );
     }
 }
 
@@ -59,13 +56,5 @@ void ModifyUsrInfo::on_pbModifyName_clicked()
     if(_info != nullptr){
         _name->setUsrInfo( _info );
         _name->show();
-    }
-}
-
-void ModifyUsrInfo::on_pbModifyDescript_clicked()
-{
-    if(_info != nullptr){
-        _descript->setUsrInfo( _info );
-        _descript->show();
     }
 }

@@ -19,32 +19,26 @@ class SessionInfo :  public QObject , public iLoadSave
     Q_OBJECT
 
     Q_PROPERTY(QVariantMap  properties     READ properties     NOTIFY propertiesChanged)
-    Q_PROPERTY(QDateTime    expireTime     READ expireTime     WRITE  setExpireTime      NOTIFY expireTimeChanged)
-
-    friend class UsrManager;
 
 public:
     explicit SessionInfo(UsrInfo* usrInfo , QObject *parent = 0);
     ~SessionInfo();
 
     QVariant& operator [](const QString& key){
-        if( !_properties.contains(key)){
-            _properties.insert(key, QVariant());
-        }
         return _properties[key];
     }
 
 public slots:
 
     /*!
-     *  本SessionInfo是否有效。
+     * 本SessionInfo是否有效。
      */
     inline bool isActive(void)const{
-        return (_expireTime >= QDateTime::currentDateTime());
+        return (_properties["expireTime"] >= QDateTime::currentDateTime());
     }
 
     /*!
-     *  会话信息的所有内容
+     * 会话信息的所有内容
      */
     inline QVariantMap& properties(void){
         return _properties;
@@ -52,55 +46,65 @@ public slots:
 
     /*!
      * 获取一个属性的值
-     * SessionInfo初始的时候必有一个属性"identifier"。
-     * 同时UsrInfo的主要属性也可以使用该函数查询。
-     * "usrName","usrLevel","usrDescription"是保留的关键字。
-     * 找不到返回QVariant()
+     * 找不到新建记录
      */
     QVariant& property(const QString& key);
 
     /*!
-     *  删除一个属性
+     * 删除一个属性
+     * SessionInfo初始的时候必有属性"identifier","expireTime"。
+     * 不允许删除"identifier","expireTime"
      */
     void unsetProperty(const QString& key);
 
     /*!
-     *  新增/更改一个属性
+     * 新增/更改一个属性
+     * SessionInfo初始的时候必有属性"identifier","expireTime"。
      */
     void setProperty(const QString& key, const QVariant& value);
 
     /*!
-     *  获取失效时间。当系统时间大于失效时间后，登录失效。
+     * 获取失效时间。当系统时间大于失效时间后，登录失效。
      */
-    QDateTime& expireTime(void);
+    QDateTime expireTime(void)const;
 
     /*!
-     *  设置失效时间。
+     * 设置失效时间。
      */
     void setExpireTime(const QDateTime& time);
 
     /*!
-     *  保存 实现iLoadSave
+     * 获取标识字符串
+     */
+    QString identifier(void)const;
+
+    /*!
+     * 设置标识字符串
+     */
+    bool setIdentifier(const QString& id);
+    /*!
+     * 保存 实现iLoadSave
      */
     void save(iLoadSaveProcessor* processor);
 
     /*!
-     *  读取 实现iLoadSave
+     * 读取 实现iLoadSave
      */
     void load(iLoadSaveProcessor* processor);
+
+    /*!
+     * 获取UsrInfo
+     */
+    inline UsrInfo& usrInfo(void){
+        return *_usrInfo;
+    }
 
 private:
     QVariantMap _properties;
     UsrInfo*    _usrInfo;
-    QDateTime   _expireTime;
-
-private slots:
-    //process the usrInfo properties changed event
-    void propertyChanged();
 
 signals:
     void propertiesChanged();
-    void expireTimeChanged();
 };
 
 #endif // SESSIONINFO_H

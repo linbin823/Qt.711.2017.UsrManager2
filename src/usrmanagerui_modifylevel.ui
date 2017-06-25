@@ -22,7 +22,7 @@
      <x>80</x>
      <y>20</y>
      <width>231</width>
-     <height>241</height>
+     <height>276</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -52,7 +52,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="5" column="0">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -65,7 +65,7 @@
       </property>
      </spacer>
     </item>
-    <item row="7" column="0" colspan="2">
+    <item row="8" column="0" colspan="2">
      <widget class="QPushButton" name="pbBack">
       <property name="text">
        <string>返回</string>
@@ -89,14 +89,14 @@
     <item row="3" column="1">
      <widget class="QLineEdit" name="lePWD"/>
     </item>
-    <item row="6" column="0" colspan="2">
+    <item row="7" column="0" colspan="2">
      <widget class="QPushButton" name="pbModifyLevel">
       <property name="text">
        <string>确认</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="5" column="1">
      <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -130,6 +130,13 @@
       </property>
       <property name="maximum">
        <number>199</number>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QCheckBox" name="cbExclusive">
+      <property name="text">
+       <string>单个独占登录</string>
       </property>
      </widget>
     </item>

@@ -53,7 +53,14 @@
       </spacer>
      </item>
      <item row="0" column="2">
-      <layout class="QGridLayout" name="gridLayout" columnstretch="1,1">
+      <layout class="QGridLayout" name="gridLayout" columnstretch="1,0">
+       <item row="0" column="1">
+        <widget class="QLabel" name="lbAddDelUsr">
+         <property name="text">
+          <string>新增/删除用户</string>
+         </property>
+        </widget>
+       </item>
        <item row="5" column="0">
         <widget class="QPushButton" name="pbAdd">
          <property name="text">
@@ -64,16 +71,6 @@
        <item row="1" column="1">
         <widget class="QLineEdit" name="leNewUsrName"/>
        </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="leNewUsrDescript"/>
-       </item>
-       <item row="5" column="1">
-        <widget class="QPushButton" name="pbDel">
-         <property name="text">
-          <string>del</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
@@ -81,13 +78,10 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QSpinBox" name="cbNewUsrLevel"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_3">
+       <item row="5" column="1">
+        <widget class="QPushButton" name="pbDel">
          <property name="text">
-          <string>用户等级</string>
+          <string>del</string>
          </property>
         </widget>
        </item>
@@ -98,20 +92,23 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="cbNewUsrLevel"/>
+       </item>
        <item row="2" column="1">
         <widget class="QLineEdit" name="leNewUsrPswd"/>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_4">
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>用户描述</string>
+          <string>用户等级</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="lbAddDelUsr">
+       <item row="4" column="0" colspan="2">
+        <widget class="QCheckBox" name="cbExclusive">
          <property name="text">
-          <string>新增/删除用户</string>
+          <string>单个独占登录</string>
          </property>
         </widget>
        </item>
@@ -340,7 +337,6 @@
   <tabstop>leNewUsrName</tabstop>
   <tabstop>leNewUsrPswd</tabstop>
   <tabstop>cbNewUsrLevel</tabstop>
-  <tabstop>leNewUsrDescript</tabstop>
   <tabstop>pbAdd</tabstop>
   <tabstop>pbDel</tabstop>
   <tabstop>pbModifyUsr</tabstop>

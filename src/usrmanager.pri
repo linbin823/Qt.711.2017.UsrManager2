@@ -11,7 +11,7 @@ SOURCES +=\
     $$PWD/usrmanagerui_modify.cpp \
     $$PWD/usrmanagerui_modifyname.cpp \
     $$PWD/usrmanagerui_modifypwd.cpp \
-    $$PWD/usrmanagerui_modifydescription.cpp \
+    #$$PWD/usrmanagerui_modifydescription.cpp \
     $$PWD/usrmanagerui_modifylevel.cpp \
     $$PWD/usrmanagerui_events.cpp \
     $$PWD/sessioninfo.cpp
@@ -24,7 +24,7 @@ HEADERS  +=\
     $$PWD/usrmanagerui_modify.h \
     $$PWD/usrmanagerui_modifyname.h \
     $$PWD/usrmanagerui_modifypwd.h \
-    $$PWD/usrmanagerui_modifydescription.h \
+    #$$PWD/usrmanagerui_modifydescription.h \
     $$PWD/usrmanagerui_modifylevel.h \
     $$PWD/usrmanagerui_events.h \
     $$PWD/sessioninfo.h
@@ -43,7 +43,6 @@ FORMS += \
     $$PWD/usrmanagerui_modify.ui \
     $$PWD/usrmanagerui_modifyname.ui \
     $$PWD/usrmanagerui_modifypwd.ui \
-    $$PWD/usrmanagerui_modifydescription.ui \
     $$PWD/usrmanagerui_modifylevel.ui \
     $$PWD/usrmanagerui_events.ui
 

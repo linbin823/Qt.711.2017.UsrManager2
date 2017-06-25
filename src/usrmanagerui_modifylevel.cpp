@@ -23,6 +23,7 @@ void UsrManagerUI_modifylevel::setUsrInfo( UsrInfo* info ){
         _info = info;
         ui->lbUsrName->setText( _info->name() );
         ui->lbUsrOldLevel->setText( QString::number( _info->level() ) );
+        ui->cbExclusive->setChecked( _info->exclusive() );
     }
 }
 
@@ -31,7 +32,9 @@ void UsrManagerUI_modifylevel::on_pbModifyLevel_clicked()
     if(_info!= nullptr){
         bool ret = _info->setLevel( ui->sbUsrNewLevel->value(),
                                     _info->genCryptoString( _info->name(), ui->lePWD->text() ));
-
+        if(ret){
+            ret = _info->setExclusive( ui->cbExclusive->isChecked(), ui->lePWD->text());
+        }
         QString msgText;
         QMessageBox msgBox;
         if(ret) msgText = "change level successful!";

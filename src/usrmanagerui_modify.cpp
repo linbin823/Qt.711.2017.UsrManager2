@@ -14,7 +14,6 @@ usrManagerUI_modify::usrManagerUI_modify(QWidget *parent) :
     _name = nullptr;
     _level = nullptr;
     _pwd = nullptr;
-    _descript = nullptr;
 }
 
 usrManagerUI_modify::~usrManagerUI_modify()
@@ -26,7 +25,6 @@ void usrManagerUI_modify::setUsrInfo( UsrInfo* info ){
         _info = info;
         ui->lbUsrName->setText( _info->name() );
         ui->lbUsrLevel->setText( QString::number(_info->level() ) );
-        ui->lbUsrDescript->setText( _info->usrDescript() );
     }
 }
 
@@ -65,16 +63,5 @@ void usrManagerUI_modify::on_pbModifyName_clicked()
         }
         _name->setUsrInfo( _info );
         _name->show();
-    }
-}
-
-void usrManagerUI_modify::on_pbModifyDescript_clicked()
-{
-    if( _info != nullptr){
-        if(_descript == nullptr){
-            _descript = new UsrManagerUI_modifydescription();
-        }
-        _descript->setUsrInfo( _info );
-        _descript->show();
     }
 }

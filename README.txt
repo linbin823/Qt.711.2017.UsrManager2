@@ -1,5 +1,8 @@
 用户管理器2
 v2.02 2017.6
+
+以后修改记录在git commit中
+
 修改：
 1、把UsrID改成QByteArray， 使用UDID生成
 2、1的其他适配的修改。

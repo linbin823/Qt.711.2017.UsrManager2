@@ -114,14 +114,14 @@ public slots:
 
     /*!
      * 添加用户
-     * 新增用户。必填：新增的用户名称。选填：等级、密码、用户描述信息。
+     * 新增用户。必填：新增的用户名称。选填：等级、密码、是否独占。
      * 注意：修改用户名或新增用户时，必须传递一个未加密的密码
      * 返回线增加的用户的实例。该对象由UsrManager管理，不允私自许删除！
      * 注意用户名不能重复，否则返回nullptr！
      * 为了方便在QML中使用，返回的指针降级为QObject*。在C++中使用时，可以用static_cast<UsrInfo*> 静态转换。
      */
     QObject* addUsr(const QString& name, int level = 1, const QString &pwdWithoutCrypto = "" ,
-                    const QString& usrDescript = QString() );
+                    bool exclusive = true );
 
     /*!
      * 删除用户

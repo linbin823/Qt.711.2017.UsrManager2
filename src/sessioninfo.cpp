@@ -10,14 +10,10 @@
 SessionInfo::SessionInfo(UsrInfo* usrInfo, QObject *parent): QObject(parent)
 {
     _usrInfo = usrInfo;
-    _expireTime = QDateTime::currentDateTime();
-    connect(_usrInfo, &UsrInfo::nameChanged,
-            this,&SessionInfo::propertyChanged);
-    connect(_usrInfo, &UsrInfo::levelChanged,
-            this,&SessionInfo::propertyChanged);
-    connect(_usrInfo, &UsrInfo::usrDescriptChanged,
-            this,&SessionInfo::propertyChanged);
-    propertyChanged();
+
+    _properties.insert("expireTime",QVariant(QDateTime::currentDateTime() ));
+    _properties.insert("identifier",QVariant("" ));
+    emit propertiesChanged();
 }
 
 SessionInfo::~SessionInfo(){
@@ -25,60 +21,61 @@ SessionInfo::~SessionInfo(){
 }
 
 QVariant& SessionInfo::property(const QString& key){
-    static QVariant emptyValue = QVariant();
-    if(_properties.contains(key))
-        return _properties[key];
-    return emptyValue;
+    return _properties[key];
 }
 
-// "usrName","usrLevel","usrDescription"是保留的关键字。
+//不允许删除"identifier","expireTime"
 void SessionInfo::unsetProperty(const QString& key){
-    if(key=="idemtifier" || key=="usrName" || key=="usrLevel" || key=="usrDescription") return;
+    if(key=="identifier" || key=="expireTime") return;
     int ret = _properties.remove(key);
     if(ret>0) emit propertiesChanged();
 }
 
-// "usrName","usrLevel","usrDescription"是保留的关键字。
 void SessionInfo::setProperty(const QString& key, const QVariant &value){
-    if(key=="idemtifier" || key=="usrName" || key=="usrLevel" || key=="usrDescription") return;
     _properties.insert(key,value);
     emit propertiesChanged();
 }
 
-QDateTime& SessionInfo::expireTime(void){
-    return _expireTime;
+QDateTime SessionInfo::expireTime(void)const{
+    return _properties["expireTime"].toDateTime();
 }
 void SessionInfo::setExpireTime(const QDateTime& time){
-    if(_expireTime != time){
-        _expireTime = time;
-        emit expireTimeChanged();
+    if(_properties["expireTime"] != time){
+        _properties["expireTime"] = time;
+        emit propertiesChanged();
     }
+}
+QString SessionInfo::identifier(void)const{
+    return _properties["identifier"].toString();
+}
+
+bool SessionInfo::setIdentifier(const QString& id){
+    _properties.insert("identifier", id);
+    return true;
 }
 
 void SessionInfo::save(iLoadSaveProcessor* processor){
-    processor->writeValue("expireTime", _expireTime);
     int num =_properties.count();
     QString key;
-    QString value;
+    QVariant value;
     QVariantMap::const_iterator it;
     processor->writeValue("propertiesNumber", num );
     int i=0;
     for(it = _properties.constBegin(); it != _properties.constEnd(); ++it,i++){
         processor->moveToInstance("properties",QString::number(i));
-        QString temp = it.key();
-        QVariant temp1=it.value();
-        processor->writeValue("key",temp );
-        processor->writeValue("value",temp1 );
+        key = it.key();
+        value=it.value();
+        processor->writeValue("key",key );
+        processor->writeValue("value",value );
         processor->moveBackToParent();
     }
 }
 
 void SessionInfo::load(iLoadSaveProcessor* processor){
-    processor->readValue("expireTime", _expireTime);
     _properties.clear();
     int ret=0,num =0;
     QString key;
-    QString value;
+    QVariant value;
     ret = processor->readValue("propertiesNumber", num);
     if(ret !=0 ) return;//not found num
     for(int i=0; i<num; i++){
@@ -88,15 +85,8 @@ void SessionInfo::load(iLoadSaveProcessor* processor){
         if(ret !=0 ) continue;//not found num
         ret = processor->readValue("value",value);
         if(ret !=0 ) continue;//not found value
-        _properties.insert(key, QVariant(value));
+        _properties.insert(key, value);
         processor->moveBackToParent();
     }
-    emit propertiesChanged();
-}
-
-void SessionInfo::propertyChanged(){
-    _properties.insert("usrName", QVariant::fromValue(_usrInfo->name()) );
-    _properties.insert("usrLevel", QVariant::fromValue(_usrInfo->level()) );
-    _properties.insert("usrDescription", QVariant::fromValue(_usrInfo->usrDescript()) );
     emit propertiesChanged();
 }

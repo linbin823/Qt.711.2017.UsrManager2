@@ -2,7 +2,6 @@
 #define USRMANAGERUI_MODIFY_H
 
 #include <QWidget>
-#include "usrmanagerui_modifydescription.h"
 #include "usrmanagerui_modifylevel.h"
 #include "usrmanagerui_modifyname.h"
 #include "usrmanagerui_modifypwd.h"
@@ -31,12 +30,9 @@ private slots:
 
     void on_pbModifyName_clicked();
 
-    void on_pbModifyDescript_clicked();
-
 private:
     Ui::usrManagerUI_modify *ui;
     UsrInfo* _info;
-    UsrManagerUI_modifydescription* _descript;
     UsrManagerUI_modifylevel*       _level;
     UsrManagerUI_modifyName*        _name;
     usrManagerUI_modifyPwd*         _pwd;
