@@ -35,7 +35,7 @@ DISTFILES += \
     $$PWD/../HISTORY.txt \
     $$PWD/../README.txt
 
-include($$PWD/../lib/loadSaveProcessor/src/loadsaveProcessor.pri)
+include($$PWD/3rd-party/loadSaveProcessor/src/loadsaveProcessor.pri)
 
 FORMS += \
     $$PWD/usrmanagerui.ui \
